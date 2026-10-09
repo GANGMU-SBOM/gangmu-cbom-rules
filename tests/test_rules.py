@@ -46,3 +46,27 @@ def test_candidate_algorithms_are_found(text, key):
     algos = load_algo_roots([_root()])
     regex = dict((a.key, r) for a, r in algos.regexes)[key]
     assert regex.search(text)
+
+
+def test_every_library_table_loads_and_names_known_algorithms():
+    algos = load_algo_roots([_root()])
+    known = {a.key for a in algos.algos}
+    assert {lib.name for lib in algos.libraries.values()} >= {"Mbed TLS", "wolfSSL", "OpenSSL"}
+    for lib in algos.libraries.values():
+        assert lib.releases, lib.name
+        for rel in lib.releases:
+            assert rel.algorithms, (lib.name, rel.introduced)
+            assert set(rel.algorithms) <= known, (lib.name, set(rel.algorithms) - known)
+
+
+def test_known_facts_hold():
+    """A few things that are true of the upstream projects, so a bad derivation shows up."""
+    algos = load_algo_roots([_root()])
+    by = {lib.name: {r.introduced: set(r.algorithms) for r in lib.releases}
+          for lib in algos.libraries.values()}
+    mbed = by["Mbed TLS"]
+    assert "rc4" in mbed["2.16.0"] and "rc4" not in mbed["3.6.0"]   # RC4 removed in 3.0
+    assert "ml-kem" not in mbed["3.6.0"] and "ml-dsa" not in mbed["3.6.0"]
+    assert "sm2" in by["OpenSSL"]["3.0.0"]
+    assert "ml-kem" in by["OpenSSL"]["3.5.0"] and "ml-kem" not in by["OpenSSL"]["3.0.0"]
+    assert "sm4" in by["GmSSL"]["3.1.0"]

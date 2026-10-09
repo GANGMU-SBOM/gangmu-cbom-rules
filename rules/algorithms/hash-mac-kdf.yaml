@@ -75,7 +75,7 @@ algorithms:
   primitive: hash
   quantum: symmetric
   patterns:
-  - mbedtls_sha3\w*
+  - mbedtls_sha3_\w+
   - SHA3_\w+
   - wc_Sha3_\w+
   - MBEDTLS_SHA3_C\b

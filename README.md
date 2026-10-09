@@ -29,6 +29,18 @@ gangmu cbom firmware/ --rules rules/   # 或者指定目录，便于本地改规
 
 前四个文件是 gangmu 内置算法表的原样导出，`tests/test_rules.py` 会逐项比对，防止两边悄悄分叉。同名 `key` 替换内置项，新 `key` 新增。
 
+## 库能力表（`rules/libraries/`）
+
+`gangmu cbom --libraries` 先做 SBOM 识别，再按识别出的库和版本，从这里查出它**提供**的算法，作为"库推断"证据（置信度不超过 0.6）。
+"提供"不等于"调用"：源码里有、默认是否启用都算提供；版本未知的库只列出，不猜。
+
+| 文件 | 库 |
+| --- | --- |
+| `mbedtls.yaml` `wolfssl.yaml` `openssl.yaml` `tongsuo.yaml` `gmssl.yaml` | Mbed TLS、wolfSSL、OpenSSL、铜锁、GmSSL |
+
+这些文件由 `tools/derive_libraries.py` 生成，不要手改：脚本克隆每个版本区间的第一个和最后一个上游标签，用 gangmu 自己的算法表扫描源码，只保留两端都出现的算法（所以区间中途才加入的算法会被漏掉，宁缺毋滥）。
+Mbed TLS 只扫 `library/`，因为它的 PSA 头文件为未实现的算法也定义了常量。要加一个版本区间，改 `tools/libraries.json` 后重新运行脚本，并检查 `tests/test_rules.py::test_known_facts_hold`。
+
 ## 规则格式
 
 ```yaml

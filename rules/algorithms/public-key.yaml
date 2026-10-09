@@ -8,6 +8,7 @@ algorithms:
   - sm2_(?:sign|verify|encrypt|decrypt|do_sign|do_verify)\w*
   - SM2_(?:sign|verify|encrypt|decrypt|compute_z_digest)\w*
   - mbedtls_sm2_\w+
+  - ossl_sm2_\w+
   - MBEDTLS_ECP_DP_SM2\w*
   - \bsm2p256v1\b
   note: 'Elliptic-curve scheme: a quantum computer breaks it like ECDSA.'
@@ -62,7 +63,6 @@ algorithms:
   - ed25519_(?:sign|verify|create_keypair|publickey)\w*
   - wc_ed25519_\w+
   - crypto_sign_ed25519\w*
-  - MBEDTLS_ECP_DP_CURVE448\b
   - \bEd25519\b
   note: 'Elliptic-curve scheme: broken by Shor''s algorithm.'
 - key: x25519

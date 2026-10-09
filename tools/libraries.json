@@ -1,0 +1,149 @@
+{
+ "libraries": [
+  {
+   "rule": "generic/mbedtls",
+   "name": "Mbed TLS",
+   "file": "mbedtls",
+   "url": "https://github.com/Mbed-TLS/mbedtls",
+   "subdirs": [
+    "library"
+   ],
+   "releases": [
+    {
+     "tag": "v2.16.12",
+     "introduced": "2.16.0",
+     "fixed": "2.17.0",
+     "first": "mbedtls-2.16.0"
+    },
+    {
+     "tag": "v2.28.10",
+     "introduced": "2.28.0",
+     "fixed": "2.29.0",
+     "first": "v2.28.0"
+    },
+    {
+     "tag": "v3.6.7",
+     "introduced": "3.6.0",
+     "fixed": "3.7.0",
+     "first": "v3.6.0"
+    }
+   ]
+  },
+  {
+   "rule": "generic/wolfssl",
+   "name": "wolfSSL",
+   "file": "wolfssl",
+   "url": "https://github.com/wolfSSL/wolfssl",
+   "subdirs": [
+    "wolfcrypt/src",
+    "wolfssl"
+   ],
+   "releases": [
+    {
+     "tag": "v5.6.6-stable",
+     "introduced": "5.6.0",
+     "fixed": "5.7.0",
+     "first": "v5.6.0-stable"
+    },
+    {
+     "tag": "v5.7.6-stable",
+     "introduced": "5.7.0",
+     "fixed": "5.8.0",
+     "first": "v5.7.0-stable"
+    },
+    {
+     "tag": "v5.8.4-stable",
+     "introduced": "5.8.0",
+     "fixed": "5.9.0",
+     "first": "v5.8.0-stable"
+    }
+   ]
+  },
+  {
+   "rule": "generic/openssl",
+   "name": "OpenSSL",
+   "file": "openssl",
+   "url": "https://github.com/openssl/openssl",
+   "subdirs": [
+    "crypto",
+    "providers",
+    "include"
+   ],
+   "releases": [
+    {
+     "tag": "OpenSSL_1_1_1w",
+     "introduced": "1.1.1",
+     "fixed": "1.1.2",
+     "first": "OpenSSL_1_1_1"
+    },
+    {
+     "tag": "openssl-3.0.22",
+     "introduced": "3.0.0",
+     "fixed": "3.1.0",
+     "first": "openssl-3.0.0"
+    },
+    {
+     "tag": "openssl-3.5.9",
+     "introduced": "3.5.0",
+     "fixed": "3.6.0",
+     "first": "openssl-3.5.0"
+    },
+    {
+     "tag": "openssl-3.6.5",
+     "introduced": "3.6.0",
+     "fixed": "3.7.0",
+     "first": "openssl-3.6.0"
+    }
+   ]
+  },
+  {
+   "rule": "generic/tongsuo",
+   "name": "Tongsuo",
+   "file": "tongsuo",
+   "url": "https://github.com/Tongsuo-Project/Tongsuo",
+   "subdirs": [
+    "crypto",
+    "providers",
+    "include"
+   ],
+   "releases": [
+    {
+     "tag": "8.4.0",
+     "introduced": "8.4.0",
+     "fixed": "8.5.0",
+     "first": "8.4.0"
+    },
+    {
+     "tag": "8.5.0",
+     "introduced": "8.5.0",
+     "fixed": "8.6.0",
+     "first": "8.5.0"
+    }
+   ]
+  },
+  {
+   "rule": "generic/gmssl",
+   "name": "GmSSL",
+   "file": "gmssl",
+   "url": "https://github.com/guanzhi/GmSSL",
+   "subdirs": [
+    "src",
+    "include"
+   ],
+   "releases": [
+    {
+     "tag": "v3.1.1",
+     "introduced": "3.1.0",
+     "fixed": "3.2.0",
+     "first": "v3.1.0"
+    },
+    {
+     "tag": "v3.2.0",
+     "introduced": "3.2.0",
+     "fixed": "3.3.0",
+     "first": "v3.2.0"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,89 @@
+# Seeded from the table built into gangmu cbom. Same key = replaces that built-in entry.
+algorithms:
+- key: sm2
+  name: SM2
+  primitive: signature
+  quantum: vulnerable
+  patterns:
+  - sm2_(?:sign|verify|encrypt|decrypt|do_sign|do_verify)\w*
+  - SM2_(?:sign|verify|encrypt|decrypt|compute_z_digest)\w*
+  - mbedtls_sm2_\w+
+  - MBEDTLS_ECP_DP_SM2\w*
+  - \bsm2p256v1\b
+  note: 'Elliptic-curve scheme: a quantum computer breaks it like ECDSA.'
+- key: rsa
+  name: RSA
+  primitive: pke
+  quantum: vulnerable
+  patterns:
+  - mbedtls_rsa_\w+
+  - RSA_(?:new|generate_key\w*|public_encrypt|private_decrypt|sign|verify)\b
+  - wc_(?:Init)?Rsa\w+
+  - MBEDTLS_RSA_C\b
+  - CONFIG_MBEDTLS_RSA_C\b
+  - PSA_ALG_RSA_\w+
+  - PSA_KEY_TYPE_RSA\w*
+  - \brsaEncryption\b
+  - \bsha\d+WithRSAEncryption\b
+  note: Broken by Shor's algorithm at every key size.
+- key: ecdsa
+  name: ECDSA
+  primitive: signature
+  quantum: vulnerable
+  patterns:
+  - mbedtls_ecdsa_\w+
+  - ECDSA_(?:do_)?(?:sign|verify|SIG_\w+)\b
+  - wc_ecc_(?:sign|verify)_hash\w*
+  - uECC_(?:sign|verify)\w*
+  - MBEDTLS_ECDSA_C\b
+  - CONFIG_MBEDTLS_ECDSA_C\b
+  - PSA_ALG_ECDSA\b
+  - PSA_ALG_DETERMINISTIC_ECDSA\b
+  - \becdsa-with-SHA\d+\b
+  note: Broken by Shor's algorithm at every curve.
+- key: ecdh
+  name: ECDH
+  primitive: key-agree
+  quantum: vulnerable
+  patterns:
+  - mbedtls_ecdh_\w+
+  - ECDH_compute_key\b
+  - wc_ecc_shared_secret\w*
+  - uECC_shared_secret\b
+  - MBEDTLS_ECDH_C\b
+  - CONFIG_MBEDTLS_ECDH_C\b
+  - PSA_ALG_ECDH\b
+  note: Broken by Shor's algorithm at every curve.
+- key: ed25519
+  name: Ed25519
+  primitive: signature
+  quantum: vulnerable
+  patterns:
+  - ed25519_(?:sign|verify|create_keypair|publickey)\w*
+  - wc_ed25519_\w+
+  - crypto_sign_ed25519\w*
+  - MBEDTLS_ECP_DP_CURVE448\b
+  - \bEd25519\b
+  note: 'Elliptic-curve scheme: broken by Shor''s algorithm.'
+- key: x25519
+  name: X25519
+  primitive: key-agree
+  quantum: vulnerable
+  patterns:
+  - curve25519_\w+
+  - x25519_\w+
+  - wc_curve25519\w*
+  - crypto_scalarmult_curve25519\w*
+  - MBEDTLS_ECP_DP_CURVE25519\w*
+  - X25519\b
+  note: 'Elliptic-curve key agreement: broken by Shor''s algorithm.'
+- key: dh
+  name: Diffie-Hellman
+  primitive: key-agree
+  quantum: vulnerable
+  patterns:
+  - mbedtls_dhm_\w+
+  - DH_(?:generate_key|compute_key)\b
+  - wc_Dh\w+
+  - MBEDTLS_DHM_C\b
+  note: 'Finite-field key agreement: broken by Shor''s algorithm.'

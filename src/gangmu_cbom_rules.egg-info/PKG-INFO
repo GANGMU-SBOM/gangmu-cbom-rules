@@ -1,3 +1,24 @@
+Metadata-Version: 2.4
+Name: gangmu-cbom-rules
+Version: 2026.10.9
+Summary: Free CBOM rule base for gangmu: the cryptographic algorithms gangmu cbom looks for, as data
+License: CDLA-Permissive-2.0 (rules); Apache-2.0 (packaging code)
+Project-URL: Homepage, https://github.com/GANGMU-SBOM/gangmu-cbom-rules
+Project-URL: Tool, https://github.com/GANGMU-SBOM/gangmu
+Project-URL: Issues, https://github.com/GANGMU-SBOM/gangmu-cbom-rules/issues
+Keywords: cbom,cryptography,post-quantum,pqc,cyclonedx,embedded,gangmu
+Classifier: Development Status :: 3 - Alpha
+Classifier: Natural Language :: Chinese (Simplified)
+Classifier: Natural Language :: English
+Classifier: Topic :: Security :: Cryptography
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4; extra == "dev"
+Requires-Dist: gangmu-sbom @ git+https://github.com/GANGMU-SBOM/gangmu@main ; extra == "dev"
+Dynamic: license-file
+
 # 纲目 CBOM 规则库 · gangmu-cbom-rules
 
 **免费的密码算法规则库：`gangmu cbom` 在固件和源码里找哪些算法、各算法对量子计算机意味着什么，都写在这里，社区共同维护。**

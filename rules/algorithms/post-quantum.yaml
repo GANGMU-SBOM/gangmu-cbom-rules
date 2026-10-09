@@ -1,0 +1,51 @@
+# Seeded from the table built into gangmu cbom. Same key = replaces that built-in entry.
+algorithms:
+- key: ml-kem
+  name: ML-KEM (Kyber)
+  primitive: kem
+  quantum: pqc
+  patterns:
+  - ML[-_]KEM\w*
+  - mlkem\w*
+  - PQCLEAN_MLKEM\w*
+  - OQS_KEM_alg_(?:ml_kem|kyber)\w*
+  - pqcrystals_kyber\w*
+  - crypto_kem_(?:keypair|enc|dec)\b
+  - wc_MlKem\w*
+  note: NIST FIPS 203.
+- key: ml-dsa
+  name: ML-DSA (Dilithium)
+  primitive: signature
+  quantum: pqc
+  patterns:
+  - ML[-_]DSA\w*
+  - mldsa\w*
+  - PQCLEAN_MLDSA\w*
+  - OQS_SIG_alg_(?:ml_dsa|dilithium)\w*
+  - pqcrystals_dilithium\w*
+  - wc_MlDsa\w*
+  - wc_dilithium\w*
+  note: NIST FIPS 204.
+- key: slh-dsa
+  name: SLH-DSA (SPHINCS+)
+  primitive: signature
+  quantum: pqc
+  patterns:
+  - SLH[-_]DSA\w*
+  - slhdsa\w*
+  - SPHINCS\w*
+  - sphincs\w*
+  - PQCLEAN_SPHINCS\w*
+  note: NIST FIPS 205.
+- key: hash-based-sig
+  name: LMS/XMSS
+  primitive: signature
+  quantum: pqc
+  patterns:
+  - mbedtls_lms_\w+
+  - wc_Lms\w+
+  - wc_Xmss\w+
+  - \bXMSS\w*
+  - HSS_(?:generate|sign|verify)\w*
+  - MBEDTLS_LMS_C\b
+  note: Stateful hash-based signatures (NIST SP 800-208), the scheme CNSA 2.0 names for firmware signing.

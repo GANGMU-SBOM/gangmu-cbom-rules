@@ -1,0 +1,120 @@
+# Seeded from the table built into gangmu cbom. Same key = replaces that built-in entry.
+algorithms:
+- key: sm3
+  name: SM3
+  primitive: hash
+  quantum: neutral
+  patterns:
+  - sm3_(?:init|update|finish|starts|hash)\w*
+  - SM3_(?:Init|Update|Final)\w*
+  - mbedtls_sm3_\w+
+  - EVP_sm3\b
+  note: Chinese national hash (256-bit output).
+- key: md5
+  name: MD5
+  primitive: hash
+  quantum: broken
+  patterns:
+  - mbedtls_md5\w*
+  - MD5_(?:Init|Update|Final)\b
+  - MD5Init\b
+  - MD5Update\b
+  - wc_Md5\w+
+  - MBEDTLS_MD5_C\b
+  - CONFIG_MBEDTLS_MD5_C\b
+  - \bMD5\(
+  - \bMD5 digest\b
+  note: Collisions are practical; not for signatures or integrity.
+- key: sha1
+  name: SHA-1
+  primitive: hash
+  quantum: broken
+  patterns:
+  - mbedtls_sha1\w*
+  - SHA1_(?:Init|Update|Final)\b
+  - SHA1\(
+  - wc_Sha\b
+  - wc_ShaUpdate\b
+  - MBEDTLS_SHA1_C\b
+  - CONFIG_MBEDTLS_SHA1_C\b
+  - PSA_ALG_SHA_1\b
+  - \bSHA-?1 digest\b
+  note: Collisions are practical; avoid in signatures.
+- key: sha-256
+  name: SHA-256
+  primitive: hash
+  quantum: symmetric
+  patterns:
+  - mbedtls_sha256\w*
+  - SHA256_(?:Init|Update|Final)\b
+  - SHA256\(
+  - wc_Sha256\w*
+  - MBEDTLS_SHA256_C\b
+  - CONFIG_MBEDTLS_SHA256_C\b
+  - PSA_ALG_SHA_256\b
+  - esp_sha\b
+  - HAL_HASH\w*
+  - CRYP_SHA256\w*
+  note: Fine today; 128-bit collision strength is the figure to weigh long-lived signatures against.
+- key: sha-512
+  name: SHA-384/SHA-512
+  primitive: hash
+  quantum: symmetric
+  patterns:
+  - mbedtls_sha512\w*
+  - SHA384_(?:Init|Update|Final)\b
+  - SHA512_(?:Init|Update|Final)\b
+  - SHA512\(
+  - wc_Sha(?:384|512)\w*
+  - MBEDTLS_SHA512_C\b
+  - CONFIG_MBEDTLS_SHA512_C\b
+  - PSA_ALG_SHA_(?:384|512)\b
+  note: SHA-384 and up are the sizes the post-quantum guidance names.
+- key: sha-3
+  name: SHA-3
+  primitive: hash
+  quantum: symmetric
+  patterns:
+  - mbedtls_sha3\w*
+  - SHA3_\w+
+  - wc_Sha3_\w+
+  - MBEDTLS_SHA3_C\b
+  - keccak_\w+
+  - PSA_ALG_SHA3_\w+
+- key: hmac
+  name: HMAC
+  primitive: mac
+  quantum: symmetric
+  patterns:
+  - mbedtls_md_hmac\w*
+  - HMAC_(?:Init|Update|Final|CTX)\w*
+  - wc_Hmac\w+
+  - PSA_ALG_HMAC\b
+  - hmac_sha\w*
+  - CONFIG_MBEDTLS_HMAC\w*
+- key: kdf
+  name: HKDF/PBKDF2
+  primitive: kdf
+  quantum: neutral
+  patterns:
+  - mbedtls_hkdf\w*
+  - HKDF\w*
+  - mbedtls_pkcs5_pbkdf2\w*
+  - PKCS5_PBKDF2\w*
+  - wc_PBKDF2\w*
+  - wc_HKDF\w*
+  - PSA_ALG_HKDF\b
+  - PSA_ALG_PBKDF2\w*
+  - MBEDTLS_HKDF_C\b
+  - MBEDTLS_PKCS5_C\b
+- key: drbg
+  name: CTR_DRBG/HMAC_DRBG
+  primitive: drbg
+  quantum: neutral
+  patterns:
+  - mbedtls_ctr_drbg_\w+
+  - mbedtls_hmac_drbg_\w+
+  - MBEDTLS_CTR_DRBG_C\b
+  - MBEDTLS_HMAC_DRBG_C\b
+  - wc_InitRng\w*
+  - RAND_DRBG\w*

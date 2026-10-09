@@ -1,0 +1,4 @@
+
+[dev]
+pytest>=7.4
+gangmu-sbom @ git+https://github.com/GANGMU-SBOM/gangmu@main

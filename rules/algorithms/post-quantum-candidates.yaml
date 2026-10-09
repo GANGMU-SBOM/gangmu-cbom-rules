@@ -1,0 +1,27 @@
+# Post-quantum schemes that are not (yet) in NIST's final standards. Names only: the
+# patterns match the identifiers the reference implementations and liboqs use.
+algorithms:
+  - key: frodokem
+    name: FrodoKEM
+    primitive: kem
+    quantum: pqc
+    patterns: ['FrodoKEM\w*', 'PQCLEAN_FRODOKEM\w*', 'OQS_KEM_alg_frodokem\w*']
+    note: Conservative lattice KEM; not a NIST standard.
+  - key: classic-mceliece
+    name: Classic McEliece
+    primitive: kem
+    quantum: pqc
+    patterns: ['Classic[-_]?McEliece\w*', 'PQCLEAN_MCELIECE\w*', 'OQS_KEM_alg_classic_mceliece\w*']
+    note: Code-based KEM with very large public keys; not a NIST standard.
+  - key: hqc
+    name: HQC
+    primitive: kem
+    quantum: pqc
+    patterns: ['PQCLEAN_HQC\w*', 'OQS_KEM_alg_hqc\w*', 'hqc_(?:keygen|encaps|decaps)\w*']
+    note: Code-based KEM NIST selected as a backup to ML-KEM; its standard is still in draft.
+  - key: fn-dsa
+    name: FN-DSA (Falcon)
+    primitive: signature
+    quantum: pqc
+    patterns: ['FN[-_]DSA\w*', 'PQCLEAN_FALCON\w*', 'OQS_SIG_alg_falcon\w*', 'falcon_(?:sign|verify|keygen)\w*']
+    note: NIST's lattice signature standard in preparation (FIPS 206); check the status before relying on it.

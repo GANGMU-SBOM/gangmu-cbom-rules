@@ -1,0 +1,2 @@
+[gangmu.rule_packs]
+cbom = gangmu_cbom_rules:path

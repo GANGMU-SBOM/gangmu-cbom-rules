@@ -70,3 +70,20 @@ def test_known_facts_hold():
     assert "sm2" in by["OpenSSL"]["3.0.0"]
     assert "ml-kem" in by["OpenSSL"]["3.5.0"] and "ml-kem" not in by["OpenSSL"]["3.0.0"]
     assert "sm4" in by["GmSSL"]["3.1.0"]
+
+
+def test_wheel_carries_the_rules(tmp_path):
+    """A built wheel must contain the rule tree, or an installed pack is empty."""
+    import subprocess
+    import sys
+    import zipfile
+    from pathlib import Path
+
+    repo = Path(__file__).resolve().parents[1]
+    out = tmp_path / "dist"
+    subprocess.run([sys.executable, "-m", "pip", "wheel", "--no-deps",
+                    "-w", str(out), str(repo)], check=True, capture_output=True)
+    names = zipfile.ZipFile(next(out.glob("*.whl"))).namelist()
+    assert "gangmu_cbom_rules/data/rulebase.json" in names
+    assert any(n.startswith("gangmu_cbom_rules/data/algorithms/") for n in names)
+    assert any(n.startswith("gangmu_cbom_rules/data/libraries/") for n in names)

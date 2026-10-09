@@ -6,7 +6,9 @@ computer. The table used to live in the tool's code; as data it can be extended 
 request, with no tool release.
 
 ```bash
-pip install gangmu-sbom gangmu-cbom-rules     # needs gangmu 0.9.0 or later
+# Not on PyPI yet: install from source (gangmu 0.9.0 or later; use git main until it is released)
+pip install git+https://github.com/GANGMU-SBOM/gangmu.git@main
+pip install git+https://github.com/GANGMU-SBOM/gangmu-cbom-rules.git
 gangmu cbom firmware/                         # installed packs of kind "cbom" are read automatically
 gangmu cbom firmware/ --rules rules/          # or point at a directory while editing
 ```

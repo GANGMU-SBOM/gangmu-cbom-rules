@@ -1,7 +1,7 @@
 {
   "format": 1,
   "name": "cbom",
-  "version": "2026.10.9",
+  "version": "2026.10.15",
   "kind": "cbom",
   "requires_gangmu": "0.9.0",
   "license": "CDLA-Permissive-2.0"

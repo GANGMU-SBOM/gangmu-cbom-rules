@@ -1,0 +1,52 @@
+# More post-quantum schemes, none of them in a final NIST standard. Names only: the patterns
+# match what liboqs and OpenSSH name them. Treat these as findings to track, not as approved algorithms.
+algorithms:
+  - key: ntru
+    name: NTRU
+    primitive: kem
+    quantum: pqc
+    patterns: ['OQS_KEM_alg_ntru_\w+']
+    note: Lattice KEM from NIST round 3 (finalist, not selected); liboqs ships the HPS and HRSS parameter sets.
+  - key: ntru-prime
+    name: Streamlined NTRU Prime (sntrup761)
+    primitive: kem
+    quantum: pqc
+    patterns: ['OQS_KEM_alg_ntruprime_\w+', 'crypto_kem_sntrup761_\w+', 'sntrup761\w*']
+    note: Lattice KEM used in OpenSSH's sntrup761x25519-sha512 key exchange; not a NIST standard.
+  - key: bike
+    name: BIKE
+    primitive: kem
+    quantum: pqc
+    patterns: ['OQS_KEM_alg_bike_\w+']
+    note: Code-based KEM from NIST round 4; not selected, and not a NIST standard.
+  - key: mayo
+    name: MAYO
+    primitive: signature
+    quantum: pqc
+    patterns: ['OQS_SIG_alg_mayo_\w+']
+    note: Multivariate signature in NIST's additional-signatures call; not a standard.
+  - key: uov
+    name: UOV
+    primitive: signature
+    quantum: pqc
+    patterns: ['OQS_SIG_alg_uov_\w+']
+    note: Multivariate signature in NIST's additional-signatures call; not a standard.
+  - key: snova
+    name: SNOVA
+    primitive: signature
+    quantum: pqc
+    patterns: ['OQS_SIG_alg_snova_\w+']
+    note: Multivariate signature in NIST's additional-signatures call; not a standard.
+  - key: cross
+    name: CROSS
+    primitive: signature
+    quantum: pqc
+    patterns: ['OQS_SIG_alg_cross_\w+']
+    note: Code-based signature in NIST's additional-signatures call; not a standard.
+  - key: pqc-hybrid
+    name: Hybrid key exchange (classical + ML-KEM)
+    primitive: combiner
+    quantum: pqc
+    patterns: ['X25519MLKEM768', 'SecP256r1MLKEM768', 'SecP384r1MLKEM1024', 'X25519Kyber768Draft00',
+               'SecP256r1Kyber768Draft00', 'mlkem768x25519-sha256', 'sntrup761x25519-sha512']
+    note: Named hybrid groups (TLS 1.3 key shares and OpenSSH key exchange). Secure if either part holds, so this keeps working while ML-KEM is young.

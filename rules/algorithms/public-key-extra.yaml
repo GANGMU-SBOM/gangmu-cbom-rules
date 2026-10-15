@@ -1,0 +1,46 @@
+# Public-key schemes that public-key.yaml leaves out. All fall to Shor's algorithm. Identifiers
+# come from the upstream sources named in the PR that added them.
+algorithms:
+  - key: ed448
+    name: Ed448
+    primitive: signature
+    quantum: vulnerable
+    patterns: ['wc_ed448_\w+', 'ossl_ed448_\w+', 'ED448_(?:KEY|PUB_KEY|PRV_KEY|SIG)_SIZE\b', 'EVP_PKEY_ED448\b']
+    note: EdDSA over Curve448 (RFC 8032).
+  - key: x448
+    name: X448
+    primitive: key-agree
+    quantum: vulnerable
+    patterns: ['wc_curve448_\w+', 'ossl_x448\w*', 'EVP_PKEY_X448\b', 'MBEDTLS_ECP_DP_CURVE448\w*']
+    note: Diffie-Hellman over Curve448 (RFC 7748).
+  - key: dsa
+    name: DSA
+    primitive: signature
+    quantum: vulnerable
+    patterns: ['DSA_(?:do_)?(?:sign|verify)\b', 'DSA_generate_(?:key|parameters\w*)\b', 'DSA_SIG_\w+',
+               'EVP_PKEY_DSA\b', 'wc_(?:Init|Make)?Dsa\w+']
+    note: Finite-field signature. FIPS 186-5 no longer approves DSA for generating signatures.
+  - key: sm9
+    name: SM9
+    primitive: signature
+    quantum: vulnerable
+    patterns: ['sm9_(?:sign|verify|encrypt|decrypt|exch)\w*', 'SM9_(?:SIGN|ENC|EXCH)_MASTER_KEY\b']
+    note: Chinese identity-based scheme over pairings (GM/T 0044) covering signature, encryption and key exchange.
+  - key: hpke
+    name: HPKE
+    primitive: pke
+    quantum: vulnerable
+    patterns: ['OSSL_HPKE_\w+', 'wc_Hpke\w+']
+    note: Hybrid public-key encryption (RFC 9180). The DHKEM suites use X25519, X448 or NIST curves.
+  - key: srp
+    name: SRP
+    primitive: key-agree
+    quantum: vulnerable
+    patterns: ['wc_Srp\w+', 'SRP_(?:Calc|get|set|check|create|VBASE)\w*']
+    note: Password-authenticated key exchange over a finite-field group (RFC 5054, RFC 2945).
+  - key: ecjpake
+    name: EC J-PAKE
+    primitive: key-agree
+    quantum: vulnerable
+    patterns: ['mbedtls_ecjpake_\w+', 'MBEDTLS_ECJPAKE_C\b', 'PSA_ALG_JPAKE\b']
+    note: Password-authenticated key exchange over an elliptic curve; used by Thread commissioning.

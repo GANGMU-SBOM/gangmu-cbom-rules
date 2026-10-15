@@ -1,0 +1,60 @@
+# Hashes, XOFs, MACs and password KDFs that hash-mac-kdf.yaml leaves out. Identifiers come
+# from the upstream sources named in the PR that added them.
+algorithms:
+  - key: md2
+    name: MD2
+    primitive: hash
+    quantum: broken
+    patterns: ['MD2_(?:Init|Update|Final)\b', 'wc_(?:InitMd2|Md2\w+)', 'mbedtls_md2\w*', 'MBEDTLS_MD2_C\b', 'EVP_md2\b']
+    note: Obsolete; moved to Historic by RFC 6149.
+  - key: md4
+    name: MD4
+    primitive: hash
+    quantum: broken
+    patterns: ['MD4_(?:Init|Update|Final)\b', 'wc_(?:InitMd4|Md4\w+)', 'mbedtls_md4\w*', 'MBEDTLS_MD4_C\b', 'EVP_md4\b']
+    note: Collisions are cheap; moved to Historic by RFC 6150. Often still present for NTLM.
+  - key: ripemd160
+    name: RIPEMD-160
+    primitive: hash
+    quantum: symmetric
+    patterns: ['RIPEMD160_(?:Init|Update|Final)\b', 'wc_(?:InitRipeMd|RipeMd\w+)', 'mbedtls_ripemd160\w*',
+               'MBEDTLS_RIPEMD160_C\b', 'EVP_ripemd160\b']
+    note: 160-bit digest, so collision resistance is about 80 bits classically and less against quantum search; not a NIST-approved hash.
+  - key: whirlpool
+    name: Whirlpool
+    primitive: hash
+    quantum: symmetric
+    patterns: ['WHIRLPOOL_(?:Init|Update|Final)\b', 'EVP_whirlpool\b']
+    note: 512-bit hash (ISO/IEC 10118-3); not NIST-approved.
+  - key: blake2
+    name: BLAKE2
+    primitive: hash
+    quantum: symmetric
+    patterns: ['blake2[bs]_(?:init|update|final)\w*', 'BLAKE2[BS]_(?:Init|Update|Final)\w*',
+               'wc_(?:Init)?Blake2[bs]\w*', 'EVP_blake2[bs]\w*', 'crypto_generichash_blake2b\w*']
+    note: RFC 7693; BLAKE2b is libsodium's generic hash. Not NIST-approved.
+  - key: shake
+    name: SHAKE (SHA-3 XOF)
+    primitive: xof
+    quantum: symmetric
+    patterns: ['EVP_shake(?:128|256)\b', 'wc_Shake(?:128|256)_\w+', 'SHAKE(?:128|256)_\w+', 'shake(?:128|256)_\w+',
+               'OQS_SHA3_shake\w+', 'FIPS202_SHAKE\w+']
+    note: FIPS 202 extendable-output functions. Post-quantum reference code uses them heavily, so they appear next to ML-KEM, ML-DSA and SLH-DSA.
+  - key: kmac
+    name: KMAC
+    primitive: mac
+    quantum: symmetric
+    patterns: ['wc_Kmac\w*', 'KMAC(?:128|256)\b']
+    note: Keccak-based MAC (NIST SP 800-185).
+  - key: argon2
+    name: Argon2
+    primitive: kdf
+    quantum: neutral
+    patterns: ['wc_Argon2\w*', 'argon2(?:id|i|d)?_(?:hash|ctx|verify)\w*', 'crypto_pwhash_argon2\w+', 'ARGON2_OK\b']
+    note: Memory-hard password hash and KDF (RFC 9106).
+  - key: scrypt
+    name: scrypt
+    primitive: kdf
+    quantum: neutral
+    patterns: ['EVP_PBE_scrypt\w*', 'wc_scrypt\w*', 'crypto_pwhash_scryptsalsa208sha256\w*', 'libscrypt_\w+', 'crypto_scrypt\b']
+    note: Memory-hard password KDF (RFC 7914).

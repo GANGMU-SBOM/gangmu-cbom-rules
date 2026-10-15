@@ -1,0 +1,86 @@
+# Symmetric ciphers, AEADs and MACs that the first four files leave out. Every identifier
+# below was found in the upstream source named in the PR that added it (OpenSSL, wolfSSL,
+# Mbed TLS 2.28 and 3.6, libsodium, GmSSL, ascon-c); none is guessed.
+algorithms:
+  - key: camellia
+    name: Camellia
+    primitive: block-cipher
+    quantum: symmetric
+    patterns: ['mbedtls_camellia_\w+', 'MBEDTLS_CAMELLIA_C\b', 'Camellia_(?:set_key|encrypt|decrypt)\b',
+               'wc_Camellia\w+', 'EVP_camellia_\w+', 'PSA_KEY_TYPE_CAMELLIA\b']
+    note: 128-bit block cipher (ISO/IEC 18033-3, RFC 3713); the same Grover guidance as AES applies.
+  - key: aria
+    name: ARIA
+    primitive: block-cipher
+    quantum: symmetric
+    patterns: ['mbedtls_aria_\w+', 'MBEDTLS_ARIA_C\b', 'ossl_aria_\w+', 'EVP_aria_\w+', 'PSA_KEY_TYPE_ARIA\b']
+    note: Korean standard 128-bit block cipher (RFC 5794); the same Grover guidance as AES applies.
+  - key: seed
+    name: SEED
+    primitive: block-cipher
+    quantum: symmetric
+    patterns: ['SEED_(?:set_key|encrypt|decrypt|\w*_encrypt)\b', 'EVP_seed_\w+']
+    note: Korean standard 128-bit block cipher with a 128-bit key (RFC 4269); a 128-bit key leaves about 64 bits against Grover.
+  - key: blowfish
+    name: Blowfish
+    primitive: block-cipher
+    quantum: broken
+    patterns: ['BF_(?:set_key|encrypt|decrypt|\w*_encrypt)\b', 'EVP_bf_\w+', 'mbedtls_blowfish_\w+', 'MBEDTLS_BLOWFISH_C\b']
+    note: 64-bit block, so long-lived sessions fall to birthday attacks (Sweet32, CVE-2016-6329). Avoid in new designs.
+  - key: idea
+    name: IDEA
+    primitive: block-cipher
+    quantum: broken
+    patterns: ['IDEA_(?:set_encrypt_key|set_decrypt_key|encrypt|\w*_encrypt)\b', 'EVP_idea_\w+']
+    note: 64-bit block cipher, legacy. The same birthday limit as Blowfish and 3DES.
+  - key: cast5
+    name: CAST5 (CAST-128)
+    primitive: block-cipher
+    quantum: broken
+    patterns: ['CAST_(?:set_key|encrypt|decrypt|\w*_encrypt)\b', 'EVP_cast5_\w+']
+    note: 64-bit block cipher, legacy. The same birthday limit as Blowfish and 3DES.
+  - key: rc2
+    name: RC2
+    primitive: block-cipher
+    quantum: broken
+    patterns: ['RC2_(?:set_key|encrypt|decrypt|\w*_encrypt)\b', 'EVP_rc2_\w+', 'wc_Rc2\w+']
+    note: 64-bit block cipher with a variable effective key length, often seen in legacy PKCS#12 files. Avoid.
+  - key: salsa20
+    name: Salsa20 / XSalsa20
+    primitive: stream-cipher
+    quantum: symmetric
+    patterns: ['crypto_stream_x?salsa20\w*', 'crypto_secretbox_xsalsa20poly1305\w*',
+               'crypto_box_curve25519xsalsa20poly1305\w*']
+    note: libsodium's classic secretbox and stream constructions (XSalsa20 with Poly1305).
+  - key: xchacha20-poly1305
+    name: XChaCha20-Poly1305
+    primitive: ae
+    quantum: symmetric
+    patterns: ['crypto_aead_xchacha20poly1305_ietf\w*', 'crypto_stream_xchacha20\w*', 'wc_XChaCha\w+']
+    note: ChaCha20-Poly1305 with a 192-bit nonce (draft-irtf-cfrg-xchacha), found in libsodium and wolfSSL.
+  - key: ascon
+    name: Ascon
+    primitive: ae
+    quantum: symmetric
+    patterns: ['wc_Ascon\w+', 'ascon_(?:aead_(?:encrypt|decrypt)|initaead|inithash)\w*']
+    note: NIST SP 800-232 (final, August 2025) lightweight AEAD and hash for constrained devices.
+  - key: zuc
+    name: ZUC
+    primitive: stream-cipher
+    quantum: symmetric
+    patterns: ['zuc_(?:init|encrypt|generate_keystream|generate_keyword|mac_\w+)\w*', 'zuc256_\w+']
+    note: Chinese stream cipher (GM/T 0001, used as 128-EEA3 and 128-EIA3 in 4G/5G); 128-bit key.
+  - key: cmac
+    name: CMAC
+    primitive: mac
+    quantum: symmetric
+    patterns: ['wc_(?:Init)?Cmac\w*', 'CMAC_(?:Init|Update|Final|CTX_\w+)\b', 'mbedtls_cipher_cmac_\w+',
+               'mbedtls_aes_cmac_prf_128', 'MBEDTLS_CMAC_C\b', 'PSA_ALG_CMAC\b']
+    note: Block-cipher MAC (NIST SP 800-38B), usually over AES; it inherits the key size of the cipher.
+  - key: aes-kw
+    name: AES Key Wrap
+    primitive: key-wrap
+    quantum: symmetric
+    patterns: ['wc_AesKey(?:Un)?Wrap\w*', 'AES_(?:wrap|unwrap)_key\b', 'EVP_aes_\d+_wrap\w*',
+               'mbedtls_nist_kw_\w+', 'MBEDTLS_NIST_KW_C\b']
+    note: NIST SP 800-38F key wrapping (KW and KWP); the same Grover guidance as AES applies.

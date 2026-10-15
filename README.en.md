@@ -15,5 +15,9 @@ gangmu cbom firmware/ --rules rules/          # or point at a directory while ed
 
 A rule with the key of a built-in replaces it; a new key adds an algorithm. The first four files under
 `rules/algorithms/` are an export of gangmu's built-in table, and `tests/test_rules.py` checks them
-entry by entry. Rule data is CDLA-Permissive-2.0, packaging code Apache-2.0, and published community rules
+entry by entry. The `*-extra.yaml` files and the candidates file add algorithms the built-in table lacks (legacy and
+regional ciphers such as Camellia, ARIA, Blowfish and ZUC; MD2/MD4, RIPEMD-160, BLAKE2, SHAKE, KMAC, Argon2, scrypt;
+Ed448, X448, DSA, SM9, HPKE, SRP, EC J-PAKE; NTRU, BIKE, MAYO, UOV, SNOVA, CROSS and hybrid groups such as
+X25519MLKEM768). Each identifier was checked against the upstream source it comes from, and the tests carry one sample per rule
+plus lookalike names that must not match. Rule data is CDLA-Permissive-2.0, packaging code Apache-2.0, and published community rules
 will not be relicensed. See the Chinese README for the rule format.

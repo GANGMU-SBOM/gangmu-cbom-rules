@@ -28,8 +28,14 @@ gangmu cbom firmware/ --rules rules/   # 或者指定目录，便于本地改规
 | `rules/algorithms/public-key.yaml` | SM2、RSA、ECDSA、ECDH、Ed25519、X25519、Diffie-Hellman |
 | `rules/algorithms/post-quantum.yaml` | ML-KEM、ML-DSA、SLH-DSA、LMS/XMSS |
 | `rules/algorithms/post-quantum-candidates.yaml` | FrodoKEM、Classic McEliece、HQC、FN-DSA（尚无最终标准的方案） |
+| `rules/algorithms/symmetric-extra.yaml` | Camellia、ARIA、SEED、Blowfish、IDEA、CAST5、RC2、Salsa20/XSalsa20、XChaCha20-Poly1305、Ascon、ZUC、CMAC、AES Key Wrap |
+| `rules/algorithms/hash-mac-kdf-extra.yaml` | MD2、MD4、RIPEMD-160、Whirlpool、BLAKE2、SHAKE、KMAC、Argon2、scrypt |
+| `rules/algorithms/public-key-extra.yaml` | Ed448、X448、DSA、SM9、HPKE、SRP、EC J-PAKE |
+| `rules/algorithms/post-quantum-extra.yaml` | NTRU、sntrup761、BIKE、MAYO、UOV、SNOVA、CROSS，以及经典+ML-KEM 的混合密钥交换（X25519MLKEM768 等） |
 
 前四个文件是 gangmu 内置算法表的原样导出，`tests/test_rules.py` 会逐项比对，防止两边悄悄分叉。同名 `key` 替换内置项，新 `key` 新增。
+`*-extra.yaml` 和候选方案文件是在内置表之外新增的算法：每个标识符都在对应上游源码（OpenSSL、wolfSSL、Mbed TLS、libsodium、liboqs、GmSSL、OpenSSH、ascon-c）里核对过，`tests/test_rules.py` 为每条规则放了一个样例，并检查相近但不该命中的名字不会命中。
+`quantum` 取值的含义：64 位分组密码（Blowfish、IDEA、CAST5）标 `broken`，依据是 Sweet32 生日攻击；SHAKE、BLAKE2 等标 `symmetric`；Argon2、scrypt 是口令 KDF，标 `neutral`。
 
 ## 库能力表（`rules/libraries/`）
 

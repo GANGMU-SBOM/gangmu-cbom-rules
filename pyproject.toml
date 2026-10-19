@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gangmu-cbom-rules"
-version = "2026.10.9"
+version = "2026.10.15"
 description = "Free CBOM rule base for gangmu: the cryptographic algorithms gangmu cbom looks for, as data"
 readme = "README.md"
 requires-python = ">=3.9"

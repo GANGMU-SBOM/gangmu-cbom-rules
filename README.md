@@ -10,8 +10,8 @@
 ## 安装
 
 ```bash
-# 尚未发布到 PyPI：先从源码安装（gangmu 需 0.9.0 或更高，发布前用 git main）
-pip install git+https://github.com/GANGMU-SBOM/gangmu.git@main
+# 本规则包尚未发布到 PyPI，从源码安装（需要 gangmu 0.9.0 或更高）
+pip install gangmu-sbom
 pip install git+https://github.com/GANGMU-SBOM/gangmu-cbom-rules.git
 gangmu cbom firmware/            # 自动读取已安装的 kind 为 cbom 的规则包
 gangmu cbom firmware/ --rules rules/   # 或者指定目录，便于本地改规则

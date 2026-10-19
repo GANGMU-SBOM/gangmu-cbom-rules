@@ -6,8 +6,8 @@ computer. The table used to live in the tool's code; as data it can be extended 
 request, with no tool release.
 
 ```bash
-# Not on PyPI yet: install from source (gangmu 0.9.0 or later; use git main until it is released)
-pip install git+https://github.com/GANGMU-SBOM/gangmu.git@main
+# This pack is not on PyPI yet: install it from source (needs gangmu 0.9.0 or later)
+pip install gangmu-sbom
 pip install git+https://github.com/GANGMU-SBOM/gangmu-cbom-rules.git
 gangmu cbom firmware/                         # installed packs of kind "cbom" are read automatically
 gangmu cbom firmware/ --rules rules/          # or point at a directory while editing

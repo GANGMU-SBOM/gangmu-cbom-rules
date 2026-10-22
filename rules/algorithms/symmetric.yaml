@@ -16,6 +16,10 @@ algorithms:
   - CONFIG_MBEDTLS_AES\w*
   - CONFIG_CRYPTO_AES\w*
   - PSA_KEY_TYPE_AES\b
+  - br_aes_\w+
+  - tc_aes\d+_\w+
+  - rijndael_(?:setup|ecb_encrypt|ecb_decrypt)\b
+  - EVP_aes_\d+_(?:cbc|ecb|ctr|cfb\w*|ofb)\b
   note: A 128-bit key leaves about 64 bits of quantum security; 256-bit keys are the usual advice.
 - key: des
   name: DES/3DES
@@ -27,6 +31,10 @@ algorithms:
   - wc_Des3?_\w+
   - MBEDTLS_DES_C\b
   - CONFIG_MBEDTLS_DES_C\b
+  - br_des_\w+
+  - des3?_(?:setup|ecb_encrypt|ecb_decrypt)\b
+  - EVP_des_\w+
+  - (?:MBEDTLS_|BR_)?TLS_\w+_WITH_3DES_EDE_CBC_\w+
   note: DES and 3DES are legacy; avoid them in new designs.
 - key: rc4
   name: RC4
@@ -38,6 +46,7 @@ algorithms:
   - RC4\(
   - wc_Arc4\w*
   - MBEDTLS_ARC4_C\b
+  - (?:MBEDTLS_|BR_)?TLS_\w+_WITH_RC4_\w+
   note: RC4 has practical attacks; remove it.
 - key: chacha20-poly1305
   name: ChaCha20-Poly1305
@@ -52,6 +61,11 @@ algorithms:
   - MBEDTLS_CHACHA20_C\b
   - MBEDTLS_CHACHAPOLY_C\b
   - crypto_aead_chacha20poly1305\w*
+  - crypto_chacha20\w*
+  - crypto_stream_chacha20\w*
+  - br_chacha20_\w+
+  - chacha20poly1305_\w+
+  - chacha_(?:setup|crypt)\b
   note: A 256-bit key.
 - key: sm4
   name: SM4

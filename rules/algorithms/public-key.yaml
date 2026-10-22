@@ -26,6 +26,10 @@ algorithms:
   - PSA_KEY_TYPE_RSA\w*
   - \brsaEncryption\b
   - \bsha\d+WithRSAEncryption\b
+  - br_rsa_\w+
+  - rsa_(?:make_key|sign_hash|verify_hash|encrypt_key|decrypt_key)(?:_ex)?\b
+  - (?:MBEDTLS_|BR_)?TLS_(?:RSA|(?:ECDHE|DHE)_RSA)_WITH_\w+
+  - (?:ECDHE|DHE)-RSA-[A-Z0-9-]+
   note: Broken by Shor's algorithm at every key size.
 - key: ecdsa
   name: ECDSA
@@ -41,6 +45,10 @@ algorithms:
   - PSA_ALG_ECDSA\b
   - PSA_ALG_DETERMINISTIC_ECDSA\b
   - \becdsa-with-SHA\d+\b
+  - br_ecdsa_\w+
+  - ecc_(?:sign|verify)_hash\b
+  - (?:MBEDTLS_|BR_)?TLS_ECDHE_ECDSA_WITH_\w+
+  - ECDHE-ECDSA-[A-Z0-9-]+
   note: Broken by Shor's algorithm at every curve.
 - key: ecdh
   name: ECDH
@@ -54,6 +62,9 @@ algorithms:
   - MBEDTLS_ECDH_C\b
   - CONFIG_MBEDTLS_ECDH_C\b
   - PSA_ALG_ECDH\b
+  - ecc_shared_secret\b
+  - (?:MBEDTLS_|BR_)?TLS_ECDHE?_(?:RSA|ECDSA|PSK)_WITH_\w+
+  - ECDHE-[A-Z]+-[A-Z0-9-]+
   note: Broken by Shor's algorithm at every curve.
 - key: ed25519
   name: Ed25519
@@ -64,6 +75,7 @@ algorithms:
   - wc_ed25519_\w+
   - crypto_sign_ed25519\w*
   - \bEd25519\b
+  - crypto_ed25519_\w+
   note: 'Elliptic-curve scheme: broken by Shor''s algorithm.'
 - key: x25519
   name: X25519
@@ -76,6 +88,7 @@ algorithms:
   - crypto_scalarmult_curve25519\w*
   - MBEDTLS_ECP_DP_CURVE25519\w*
   - X25519\b
+  - crypto_x25519\w*
   note: 'Elliptic-curve key agreement: broken by Shor''s algorithm.'
 - key: dh
   name: Diffie-Hellman
@@ -86,4 +99,7 @@ algorithms:
   - DH_(?:generate_key|compute_key)\b
   - wc_Dh\w+
   - MBEDTLS_DHM_C\b
+  - dh_(?:make_key|shared_secret|set_pg)\w*
+  - (?:MBEDTLS_|BR_)?TLS_DHE_(?:RSA|DSS|PSK)_WITH_\w+
+  - DHE-[A-Z]+-[A-Z0-9-]+
   note: 'Finite-field key agreement: broken by Shor''s algorithm.'

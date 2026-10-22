@@ -36,6 +36,7 @@ algorithms:
   - SPHINCS\w*
   - sphincs\w*
   - PQCLEAN_SPHINCS\w*
+  - OQS_SIG_(?:alg_)?slh_dsa\w*
   note: NIST FIPS 205.
 - key: hash-based-sig
   name: LMS/XMSS
@@ -48,4 +49,6 @@ algorithms:
   - \bXMSS\w*
   - HSS_(?:generate|sign|verify)\w*
   - MBEDTLS_LMS_C\b
+  - OQS_SIG_STFL_alg_\w+
+  - OQS_LMS_ID_\w+
   note: Stateful hash-based signatures (NIST SP 800-208), the scheme CNSA 2.0 names for firmware signing.

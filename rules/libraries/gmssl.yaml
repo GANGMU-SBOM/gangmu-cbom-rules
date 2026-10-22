@@ -6,10 +6,10 @@ libraries:
   releases:
   - introduced: 3.1.0
     fixed: 3.2.0
-    algorithms: [sm4, sm3, sm2, sha-3, hmac, kdf, rsa, ecdsa, sm9, zuc]
+    algorithms: [sm4, sm3, sm2, md5, sha1, sha-256, sha-512, sha-3, hmac, kdf, rsa, ecdsa, sm9, zuc]
     source: https://github.com/guanzhi/GmSSL tags v3.1.0 and v3.1.1 (intersection), scanned src, include
   - introduced: 3.2.0
     fixed: 3.3.0
-    algorithms: [sm4, sm3, sm2, hmac, kdf, rsa, ecdsa, ml-dsa, slh-dsa, hash-based-sig, pqc-hybrid, sm9,
-      zuc]
+    algorithms: [sm4, sm3, sm2, sha1, sha-256, sha-512, hmac, kdf, rsa, ecdsa, ecdh, ml-dsa, slh-dsa,
+      hash-based-sig, pqc-hybrid, sm9, zuc]
     source: https://github.com/guanzhi/GmSSL tags v3.2.0 and v3.2.0 (intersection), scanned src, include

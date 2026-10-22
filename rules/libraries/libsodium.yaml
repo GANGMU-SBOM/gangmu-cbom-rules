@@ -6,7 +6,7 @@ libraries:
   releases:
   - introduced: 1.0.12
     fixed: 1.0.23
-    algorithms: [chacha20-poly1305, ed25519, x25519, gcm, poly1305, siphash, blake2, argon2, scrypt, salsa20,
-      xchacha20-poly1305]
+    algorithms: [chacha20-poly1305, sha-256, sha-512, hmac, ed25519, x25519, gcm, poly1305, siphash, blake2,
+      argon2, scrypt, salsa20, xchacha20-poly1305]
     source: https://github.com/jedisct1/libsodium tags 1.0.12 and 1.0.22-RELEASE (intersection), scanned
       src/libsodium

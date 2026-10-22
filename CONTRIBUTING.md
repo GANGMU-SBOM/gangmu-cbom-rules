@@ -8,3 +8,6 @@
 4. 在 PR 里写明标识符出自哪个库的哪个文件（链接即可）。对没有标准化的方案，`note` 里写明状态。
 
 提交请带 `Signed-off-by`（`git commit -s`）。
+
+只写标识符（函数、宏、算法名），不写目录特征、文件哈希或版本探针：识别"是哪个库、哪个版本"是 SBOM 规则的事，放在 gangmu-rules。
+找缺口用 `tools/mine_gaps.py`（见 README）。

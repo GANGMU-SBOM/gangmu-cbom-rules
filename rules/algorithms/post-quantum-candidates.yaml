@@ -5,7 +5,7 @@ algorithms:
     name: FrodoKEM
     primitive: kem
     quantum: pqc
-    patterns: ['FrodoKEM\w*', 'PQCLEAN_FRODOKEM\w*', 'OQS_KEM_alg_frodokem\w*']
+    patterns: ['FrodoKEM\w*', 'PQCLEAN_FRODOKEM\w*', 'OQS_KEM_alg_e?frodokem\w*']
     note: Conservative lattice KEM; not a NIST standard.
   - key: classic-mceliece
     name: Classic McEliece

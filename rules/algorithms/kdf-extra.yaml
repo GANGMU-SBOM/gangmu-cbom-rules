@@ -1,0 +1,15 @@
+# Key-derivation functions beyond HKDF and PBKDF2. They are not a quantum question, but a CBOM
+# lists them because the protocol that uses them (TLS 1.2, SRTP, 5G, Bluetooth) names the algorithm.
+algorithms:
+  - key: tls-prf
+    name: TLS 1.2 PRF
+    primitive: kdf
+    quantum: neutral
+    patterns: ['PSA_ALG_TLS12_(?:PRF|PSK_TO_MS|ECJPAKE_TO_PMS)\b', 'wc_PRF_TLS\b', 'EVP_PKEY_TLS1_PRF\b']
+    note: HMAC-based key expansion of TLS 1.2 (RFC 5246). TLS 1.3 uses HKDF instead, so seeing this means a TLS 1.2 path is compiled in.
+  - key: sp800-kdf
+    name: SP 800-56C / SP 800-108 KDF
+    primitive: kdf
+    quantum: neutral
+    patterns: ['wc_KDA_KDF_\w+', 'OSSL_KDF_NAME_(?:KBKDF|SSKDF)\b', 'PSA_ALG_SP800_108\w*']
+    note: NIST one-step and two-step key derivation and the counter-mode KDF; found in FIPS-oriented builds.

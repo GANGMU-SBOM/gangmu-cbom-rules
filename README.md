@@ -30,7 +30,10 @@ gangmu cbom firmware/ --rules rules/   # 或者指定目录，便于本地改规
 | `rules/algorithms/post-quantum-candidates.yaml` | FrodoKEM、Classic McEliece、HQC、FN-DSA（尚无最终标准的方案） |
 | `rules/algorithms/symmetric-extra.yaml` | Camellia、ARIA、SEED、Blowfish、IDEA、CAST5、RC2、Salsa20/XSalsa20、XChaCha20-Poly1305、Ascon、ZUC、CMAC、AES Key Wrap |
 | `rules/algorithms/hash-mac-kdf-extra.yaml` | MD2、MD4、RIPEMD-160、Whirlpool、BLAKE2、SHAKE、KMAC、Argon2、scrypt |
-| `rules/algorithms/public-key-extra.yaml` | Ed448、X448、DSA、SM9、HPKE、SRP、EC J-PAKE |
+| `rules/algorithms/public-key-extra.yaml` | Ed448、X448、DSA、SM9、HPKE、SRP、EC J-PAKE，另有 ECIES、WPA3 的 SAE、不带曲线名的 EdDSA 标识符（PSA、Monocypher）、secp256k1 |
+| `rules/algorithms/aead-modes-extra.yaml` | 内置表只认 AES 内核，这里补上它上面的工作模式和 MAC：GCM、CCM、XTS、OCB、EAX、AES-SIV、GMAC，以及单独使用的 Poly1305、SipHash |
+| `rules/algorithms/legacy-regional-extra.yaml` | Twofish、RC5、XTEA、KASUMI，俄罗斯标准的 Kuznyechik、Magma、Streebog、GOST R 34.10，以及"NULL 加密"（`EVP_enc_null`、`TLS_*_WITH_NULL_*`，标 `broken`） |
+| `rules/algorithms/kdf-extra.yaml` | TLS 1.2 PRF、NIST SP 800-56C / 800-108 KDF |
 | `rules/algorithms/post-quantum-extra.yaml` | NTRU、sntrup761、BIKE、MAYO、UOV、SNOVA、CROSS，以及经典+ML-KEM 的混合密钥交换（X25519MLKEM768 等） |
 
 前四个文件是 gangmu 内置算法表的原样导出，`tests/test_rules.py` 会逐项比对，防止两边悄悄分叉。同名 `key` 替换内置项，新 `key` 新增。
@@ -44,10 +47,26 @@ gangmu cbom firmware/ --rules rules/   # 或者指定目录，便于本地改规
 
 | 文件 | 库 |
 | --- | --- |
-| `mbedtls.yaml` `wolfssl.yaml` `openssl.yaml` `tongsuo.yaml` `gmssl.yaml` | Mbed TLS、wolfSSL、OpenSSL、铜锁、GmSSL |
+| `mbedtls.yaml` `wolfssl.yaml` `openssl.yaml` `tongsuo.yaml` `gmssl.yaml` `libsodium.yaml` `tf-psa-crypto.yaml` | Mbed TLS、wolfSSL、OpenSSL、铜锁、GmSSL、libsodium、TF-PSA-Crypto |
 
 这些文件由 `tools/derive_libraries.py` 生成，不要手改：脚本克隆每个版本区间的第一个和最后一个上游标签，用 gangmu 自己的算法表扫描源码，只保留两端都出现的算法（所以区间中途才加入的算法会被漏掉，宁缺毋滥）。
 Mbed TLS 只扫 `library/`，因为它的 PSA 头文件为未实现的算法也定义了常量。要加一个版本区间，改 `tools/libraries.json` 后重新运行脚本，并检查 `tests/test_rules.py::test_known_facts_hold`。
+
+## 和 SBOM 的分工
+
+这个规则包只回答"固件里有哪些密码算法、对量子计算机意味着什么"。"这是哪个库、哪个版本、有哪些 CVE"是 SBOM 的事，规则在 [gangmu-rules](https://github.com/GANGMU-SBOM/gangmu-rules)。
+算法规则只写标识符（函数、宏、算法名），不写目录特征、文件哈希或版本探针。库能力表（`libraries/`）是两边的接点：它用 SBOM 规则的 id 指向库，但只记录"这个库的源码提供哪些算法"，库本身怎么被认出来仍由 SBOM 完成。
+一个库的函数名如果内置表不认（libsodium、TinyCrypt、LibTomCrypt 的 AES、SHA、RSA），不要为此建一张表：内置的 `key` 在这里改写会让种子测试失败，应该改 gangmu 内置表。
+
+## 找缺口
+
+`tools/mine_gaps.py` 把上游源码里和密码相关的标识符拿出来，列出当前规则一条都没命中的那些，按算法词分组：
+
+```bash
+python tools/mine_gaps.py /path/to/upstreams rules/ openssl wolfssl      # 后面的库名可省略，默认扫目录下全部
+```
+
+新规则加进来之前，用它确认每个模式只命中想要的名字（相近但不该命中的写进 `tests/test_rules.py`）。
 
 ## 规则格式
 

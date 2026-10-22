@@ -40,6 +40,7 @@ def test_the_seed_matches_the_built_in_table_exactly():
     (b"int r = FrodoKEM_keypair(pk, sk);", "frodokem"),
     (b"OQS_KEM_alg_classic_mceliece_348864", "classic-mceliece"),
     (b"PQCLEAN_HQC128_CLEAN_crypto_kem_enc", "hqc"),
+    (b"OQS_KEM_alg_efrodokem_640_aes", "frodokem"),
     (b"falcon_sign_dyn(rng, sig)", "fn-dsa"),
 ])
 def test_candidate_algorithms_are_found(text, key):
@@ -89,6 +90,45 @@ EXTRA_SAMPLES = [
     ("OQS_SIG_alg_cross_rsdp_128_fast", "cross"),
     ('"mlkem768x25519-sha256"', "pqc-hybrid"),                           # OpenSSH
     ("TLSEXT_GROUP X25519MLKEM768", "pqc-hybrid"),                       # OpenSSL
+    ('"mlkem768nistp256-sha256"', "pqc-hybrid"),                         # OpenSSH
+    ("OQS_SIG_alg_qruov_1q7L10aes", "qruov"),                            # liboqs
+    ("mldsa44_ed25519_1", "pqc-hybrid-sig"),                             # OpenSSH development tree
+    ("mbedtls_gcm_crypt_and_tag(&ctx, MBEDTLS_GCM_ENCRYPT, n, iv, 12, 0, 0, in, out, 16, tag);", "gcm"),
+    ("wc_AesGcmEncrypt(&aes, out, in, sz, iv, 12, tag, 16, NULL, 0);", "gcm"),    # wolfSSL
+    ("psa_aead_encrypt(key, PSA_ALG_GCM, nonce, 12, 0, 0, in, n, out, sz, &len);", "gcm"),
+    ("mbedtls_ccm_setkey(&ctx, MBEDTLS_CIPHER_ID_AES, key, 128);", "ccm"),        # Mbed TLS 3.6
+    ("tc_ccm_config(&c, &sched, nonce, 13, 8);", "ccm"),                 # TinyCrypt
+    ("ccmp_encrypt(tk, frame, len, qos, a1, a2, a3, a4, &olen);", "ccm"),         # hostap
+    ("wc_AesXtsSetKey(&aes, key, 64, AES_ENCRYPTION, NULL, 0);", "xts"),          # wolfSSL
+    ("EVP_aes_256_ocb()", "ocb"),                                        # OpenSSL
+    ("wc_AesEaxInit(&eax, key, 16, iv, 12, hdr, 8);", "eax"),            # wolfSSL
+    ("wc_AesSivEncrypt(key, 32, hdr, 8, nonce, 12, in, n, tag, out);", "siv"),     # wolfSSL
+    ("wc_GmacSetKey(&gmac, key, 16);", "gmac"),                          # wolfSSL
+    ("crypto_onetimeauth_poly1305_init(&st, key);", "poly1305"),         # libsodium
+    ("Poly1305_Init(&ctx, key);", "poly1305"),                           # OpenSSL
+    ("crypto_shorthash(out, in, n, k);", "siphash"),                     # libsodium
+    ("twofish_setup(key, 16, 0, &skey);", "twofish"),                    # LibTomCrypt
+    ("RC5_32_set_key(&k, 16, key, 12);", "rc5"),                         # OpenSSL
+    ("xtea_setup(key, 16, 0, &skey);", "xtea"),                          # LibTomCrypt
+    ("kasumi_setup(key, 16, 0, &skey);", "kasumi"),                      # LibTomCrypt
+    ("gost_grasshopper_cipher_init_ecb(ctx);", "kuznyechik"),            # gost-engine
+    ("magmacrypt(ctx, in, out);", "gost-magma"),                         # gost-engine
+    ("init_gost2012_hash_ctx(&ctx, 256);", "streebog"),                  # gost-engine
+    ("gost_ec_sign(dgst, dlen, ctx);", "gost3410"),                      # gost-engine
+    ("EVP_EncryptInit_ex(ctx, EVP_enc_null(), 0, 0, 0);", "null-cipher"),         # OpenSSL
+    ("TLS_RSA_WITH_NULL_SHA256", "null-cipher"),
+    ("BR_TLS_RSA_WITH_NULL_SHA256", "null-cipher"),                      # BearSSL
+    ("psa_key_derivation_setup(&op, PSA_ALG_TLS12_PRF(PSA_ALG_SHA_256));", "tls-prf"),
+    ("wc_KDA_KDF_onestep(z, zl, fi, fl, 32, WC_HASH_TYPE_SHA256, out, 32);", "sp800-kdf"),
+    ("wc_ecc_encrypt(&priv, &pub, msg, n, out, &olen, NULL);", "ecies"),  # wolfSSL
+    ("ecc_encrypt_key(in, n, out, &olen, &prng, wprng, hash, &key);", "ecies"),    # LibTomCrypt
+    ("sae_write_commit(sae, buf, NULL, NULL, 0);", "sae"),               # hostap
+    ("psa_sign_message(key, PSA_ALG_PURE_EDDSA, m, n, s, sz, &sl);", "eddsa"),
+    ("crypto_eddsa_sign(sig, secret_key, msg, len);", "eddsa"),          # Monocypher
+    ("crypto_blake2b_init(&ctx, 32);", "blake2"),                        # Monocypher
+    ("crypto_argon2(hash, 32, work_area, config, inputs, extras);", "argon2"),
+    ("secp256k1_ecdsa_sign(ctx, &sig, msg32, seckey, NULL, NULL);", "secp256k1"),  # libsecp256k1
+    ("secp256k1_schnorrsig_sign32(ctx, sig, msg32, &keypair, aux);", "secp256k1"),
 ]
 
 
@@ -116,6 +156,22 @@ def test_every_added_rule_has_a_sample():
     (b"XWING_KEM", "pqc-hybrid"),                       # not verified in any upstream source
     (b"my_BF_encrypt_wrapper(x);", "blowfish"),
     (b"MY_SHAKE128_RATE_X", "shake"),
+    (b"cpuid(&eax, &ebx);", "eax"),                     # a register, not EAX mode
+    (b"xgetbv_eax(0);", "eax"),
+    (b"int ccm_len = 3;", "ccm"),
+    (b"EVP_aes_128_gcm_x();", "gcm"),
+    (b"crypto_aead_chacha20poly1305_ietf_encrypt(c);", "poly1305"),   # the AEAD has its own rule
+    (b"int xts_len = 16;", "xts"),
+    (b"magma_table[4];", "gost-magma"),
+    (b"streebog_note();", "streebog"),
+    (b"sae_group = 19;", "sae"),
+    (b"ssae_write_commit(x);", "sae"),
+    (b"TLS_RSA_WITH_AES_128_GCM_SHA256", "null-cipher"),
+    (b"TLS_NULL_WITH_NULL_NULL", "null-cipher"),        # the pre-handshake state, not an offered suite
+    (b"BR_TLS_NULL_WITH_NULL_NULL", "null-cipher"),
+    (b"mldsa44_x25519", "pqc-hybrid-sig"),
+    (b"OQS_SIG_alg_ml_dsa_44", "qruov"),
+    (b"EVP_PKEY_ED25519", "eddsa"),
 ])
 def test_lookalikes_are_not_taken_for_the_algorithm(text, key):
     algos = load_algo_roots([_root()])
@@ -181,3 +237,17 @@ def test_the_three_places_that_name_the_version_agree():
     declared = re.search(r'^version = "([^"]+)"', (root / "pyproject.toml").read_text(), re.M)
     manifest = json.loads((root / "rules" / "rulebase.json").read_text())["version"]
     assert declared and declared.group(1) == gangmu_cbom_rules.__version__ == manifest
+
+
+def test_a_scan_with_the_pack_names_the_modes_and_the_null_cipher(tmp_path):
+    """End to end: the AES core and the GCM mode on top of it are separate assets, and a
+    NULL cipher in the sources is reported as legacy/weak."""
+    from gangmu.cbom import scan_cbom
+    (tmp_path / "tls.c").write_text(
+        "mbedtls_aes_setkey_enc(&a, k, 128);\n"
+        "mbedtls_gcm_setkey(&g, MBEDTLS_CIPHER_ID_AES, k, 128);\n"
+        "ssl_set_suite(MBEDTLS_TLS_RSA_WITH_NULL_SHA);\n")
+    found = {a.algo.key: a for a in scan_cbom(tmp_path, algos=load_algo_roots([_root()])).assets}
+    assert {"aes", "gcm", "null-cipher"} <= set(found)
+    assert found["null-cipher"].algo.quantum == "broken"
+    assert found["gcm"].algo.primitive == "ae"

@@ -144,6 +144,41 @@
      "first": "v3.2.0"
     }
    ]
+  },
+  {
+   "rule": "generic/libsodium",
+   "name": "libsodium",
+   "file": "libsodium",
+   "url": "https://github.com/jedisct1/libsodium",
+   "subdirs": [
+    "src/libsodium"
+   ],
+   "releases": [
+    {
+     "tag": "1.0.22-RELEASE",
+     "introduced": "1.0.12",
+     "fixed": "1.0.23",
+     "first": "1.0.12"
+    }
+   ]
+  },
+  {
+   "rule": "generic/tf-psa-crypto",
+   "name": "TF-PSA-Crypto",
+   "file": "tf-psa-crypto",
+   "url": "https://github.com/Mbed-TLS/TF-PSA-Crypto",
+   "subdirs": [
+    "core",
+    "drivers"
+   ],
+   "releases": [
+    {
+     "tag": "v1.1.1",
+     "introduced": "1.0.0",
+     "fixed": "1.2.0",
+     "first": "v1.0.0"
+    }
+   ]
   }
  ]
 }

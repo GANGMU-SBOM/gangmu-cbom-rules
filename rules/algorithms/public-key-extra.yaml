@@ -44,3 +44,29 @@ algorithms:
     quantum: vulnerable
     patterns: ['mbedtls_ecjpake_\w+', 'MBEDTLS_ECJPAKE_C\b', 'PSA_ALG_JPAKE\b']
     note: Password-authenticated key exchange over an elliptic curve; used by Thread commissioning.
+  - key: ecies
+    name: ECIES
+    primitive: pke
+    quantum: vulnerable
+    patterns: ['wc_ecc_(?:encrypt|decrypt|ctx_)\w*', 'ecc_(?:encrypt|decrypt)_key\b']
+    note: Elliptic-curve integrated encryption (SEC 1, ISO 18033-2), an ECDH key agreement plus a KDF and an AEAD, so it falls to Shor's algorithm like ECDH.
+  - key: sae
+    name: SAE (WPA3-Personal)
+    primitive: key-agree
+    quantum: vulnerable
+    patterns: ['sae_(?:prepare_commit\w*|process_commit|parse_commit|write_commit|write_confirm\w*|check_confirm\w*|derive_pwe\w*|derive_pt)\b',
+               'WPA_KEY_MGMT_SAE\b', 'CONFIG_SAE\b']
+    note: Simultaneous Authentication of Equals, the Dragonfly handshake of WPA3-Personal (IEEE 802.11-2016), over an elliptic-curve or finite-field group. It resists offline password guessing, but the group arithmetic falls to Shor's algorithm.
+  - key: eddsa
+    name: EdDSA (by API name)
+    primitive: signature
+    quantum: vulnerable
+    patterns: ['PSA_ALG_(?:PURE_EDDSA|ED25519PH|ED448PH|HASH_EDDSA\w*)\b', 'crypto_eddsa_(?:sign|check|key_pair)\w*']
+    note: The EdDSA names that carry no curve, the PSA Crypto algorithm identifiers (the curve is in the key type) and Monocypher's API (Ed25519 with BLAKE2b or SHA-512). Broken by Shor's algorithm.
+  - key: secp256k1
+    name: secp256k1 (ECDSA, ECDH, Schnorr)
+    primitive: signature
+    quantum: vulnerable
+    patterns: ['secp256k1_(?:ecdsa_\w+|ec_\w+|ecdh|schnorrsig_\w+|xonly_pubkey_\w+|keypair_\w+|ellswift_\w+|musig_\w+)',
+               'MBEDTLS_ECP_DP_SECP256K1\w*']
+    note: The Bitcoin curve, with ECDSA, BIP-340 Schnorr signatures and MuSig2 on it. Broken by Shor's algorithm; wallets and payment terminals use it.

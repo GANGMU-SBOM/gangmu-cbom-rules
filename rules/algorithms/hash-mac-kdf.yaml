@@ -24,6 +24,9 @@ algorithms:
   - CONFIG_MBEDTLS_MD5_C\b
   - \bMD5\(
   - \bMD5 digest\b
+  - br_md5_\w+
+  - md5_(?:init|process|done)\b
+  - EVP_md5\b
   note: Collisions are practical; not for signatures or integrity.
 - key: sha1
   name: SHA-1
@@ -39,6 +42,10 @@ algorithms:
   - CONFIG_MBEDTLS_SHA1_C\b
   - PSA_ALG_SHA_1\b
   - \bSHA-?1 digest\b
+  - br_sha1_\w+
+  - sha1_(?:init|process|done)\b
+  - SHA1(?:Init|Update|Final|Transform)\b
+  - EVP_sha1\b
   note: Collisions are practical; avoid in signatures.
 - key: sha-256
   name: SHA-256
@@ -55,6 +62,11 @@ algorithms:
   - esp_sha\b
   - HAL_HASH\w*
   - CRYP_SHA256\w*
+  - tc_sha256_\w+
+  - br_sha(?:224|256)_\w+
+  - crypto_hash_sha256\w*
+  - sha256_(?:init|process|done)\b
+  - EVP_sha(?:224|256)\b
   note: Fine today; 128-bit collision strength is the figure to weigh long-lived signatures against.
 - key: sha-512
   name: SHA-384/SHA-512
@@ -69,6 +81,11 @@ algorithms:
   - MBEDTLS_SHA512_C\b
   - CONFIG_MBEDTLS_SHA512_C\b
   - PSA_ALG_SHA_(?:384|512)\b
+  - crypto_hash_sha512\w*
+  - crypto_sha512\w*
+  - br_sha(?:384|512)_\w+
+  - sha(?:384|512)_(?:init|process|done)\b
+  - EVP_sha(?:384|512)\b
   note: SHA-384 and up are the sizes the post-quantum guidance names.
 - key: sha-3
   name: SHA-3
@@ -81,6 +98,7 @@ algorithms:
   - MBEDTLS_SHA3_C\b
   - keccak_\w+
   - PSA_ALG_SHA3_\w+
+  note: ''
 - key: hmac
   name: HMAC
   primitive: mac
@@ -92,6 +110,11 @@ algorithms:
   - PSA_ALG_HMAC\b
   - hmac_sha\w*
   - CONFIG_MBEDTLS_HMAC\w*
+  - tc_hmac_\w+
+  - br_hmac_(?:init|update|out|key_init)\w*
+  - crypto_auth_hmacsha\w*
+  - hmac_(?:init|process|done|memory)\b
+  note: ''
 - key: kdf
   name: HKDF/PBKDF2
   primitive: kdf
@@ -107,6 +130,8 @@ algorithms:
   - PSA_ALG_PBKDF2\w*
   - MBEDTLS_HKDF_C\b
   - MBEDTLS_PKCS5_C\b
+  - crypto_kdf_hkdf_\w+
+  note: ''
 - key: drbg
   name: CTR_DRBG/HMAC_DRBG
   primitive: drbg
@@ -118,3 +143,6 @@ algorithms:
   - MBEDTLS_HMAC_DRBG_C\b
   - wc_InitRng\w*
   - RAND_DRBG\w*
+  - br_hmac_drbg_\w+
+  - tc_(?:hmac|ctr)_prng_\w+
+  note: ''

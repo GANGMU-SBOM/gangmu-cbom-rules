@@ -31,7 +31,7 @@ algorithms:
     primitive: hash
     quantum: symmetric
     patterns: ['blake2[bs]_(?:init|update|final)\w*', 'BLAKE2[BS]_(?:Init|Update|Final)\w*',
-               'wc_(?:Init)?Blake2[bs]\w*', 'EVP_blake2[bs]\w*', 'crypto_generichash_blake2b\w*']
+               'wc_(?:Init)?Blake2[bs]\w*', 'EVP_blake2[bs]\w*', 'crypto_generichash_blake2b\w*', 'crypto_blake2b\w*']
     note: RFC 7693; BLAKE2b is libsodium's generic hash. Not NIST-approved.
   - key: shake
     name: SHAKE (SHA-3 XOF)
@@ -50,7 +50,7 @@ algorithms:
     name: Argon2
     primitive: kdf
     quantum: neutral
-    patterns: ['wc_Argon2\w*', 'argon2(?:id|i|d)?_(?:hash|ctx|verify)\w*', 'crypto_pwhash_argon2\w+', 'ARGON2_OK\b']
+    patterns: ['wc_Argon2\w*', 'argon2(?:id|i|d)?_(?:hash|ctx|verify)\w*', 'crypto_pwhash_argon2\w+', 'crypto_argon2\w*', 'ARGON2_OK\b']
     note: Memory-hard password hash and KDF (RFC 9106).
   - key: scrypt
     name: scrypt

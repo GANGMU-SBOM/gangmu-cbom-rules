@@ -1,0 +1,65 @@
+# Authenticated-encryption modes, MACs and PRFs that the first four files leave out. The
+# built-in AES rule only sees the cipher core (mbedtls_aes_, wc_Aes ...); the mode on top of it
+# (GCM, CCM, XTS, OCB, EAX, SIV) has its own API in every library, and a CBOM should say which
+# one is used. Identifiers were checked against the upstream sources (Mbed TLS 3.6 and
+# TF-PSA-Crypto 1.1, wolfSSL, OpenSSL 3.6, BearSSL, TinyCrypt, LibTomCrypt, libsodium, hostap).
+algorithms:
+  - key: gcm
+    name: GCM
+    primitive: ae
+    quantum: symmetric
+    patterns: ['mbedtls_gcm_\w+', 'MBEDTLS_GCM_C\b', 'PSA_ALG_GCM\b', 'wc_AesGcm\w*', 'CRYPTO_gcm128_\w+',
+               'EVP_aes_\d+_gcm\b', 'br_gcm_\w+', 'crypto_aead_aes256gcm\w*', 'gcmp_(?:256_)?(?:encrypt|decrypt)\b']
+    note: Galois/Counter Mode (NIST SP 800-38D). The block cipher under it is usually AES, so the AES key-size advice applies; reusing a nonce under one key breaks it.
+  - key: ccm
+    name: CCM
+    primitive: ae
+    quantum: symmetric
+    patterns: ['mbedtls_ccm_\w+', 'MBEDTLS_CCM_C\b', 'PSA_ALG_CCM\b', 'wc_AesCcm\w*', 'CRYPTO_ccm128_\w+',
+               'EVP_aes_\d+_ccm\b', 'br_ccm_\w+', 'tc_ccm_\w+', 'ccmp_(?:256_)?(?:encrypt|decrypt)\b']
+    note: Counter with CBC-MAC (NIST SP 800-38C, RFC 3610). The AEAD of Bluetooth LE, Zigbee, Thread and WPA2 (CCMP); the AES key-size advice applies.
+  - key: xts
+    name: XTS
+    primitive: block-cipher
+    quantum: symmetric
+    patterns: ['mbedtls_aes_xts_\w+', 'MBEDTLS_CIPHER_MODE_XTS\b', 'PSA_ALG_XTS\b', 'wc_AesXts\w*', 'CRYPTO_xts128\w*',
+               'EVP_aes_\d+_xts\b']
+    note: Tweakable mode for storage encryption (IEEE 1619, NIST SP 800-38E). It gives confidentiality only, no integrity; XTS-AES-256 takes a 512-bit key made of two AES-256 keys.
+  - key: ocb
+    name: OCB
+    primitive: ae
+    quantum: symmetric
+    patterns: ['CRYPTO_ocb128_\w+', 'EVP_aes_\d+_ocb\b', 'ocb3_(?:init|encrypt|decrypt)\w*', 'LTC_OCB3?_MODE\b']
+    note: Offset Codebook AEAD (RFC 7253).
+  - key: eax
+    name: EAX
+    primitive: ae
+    quantum: symmetric
+    patterns: ['wc_AesEax\w*', 'br_eax_\w+', 'LTC_EAX_MODE\b', 'eax_(?:init|encrypt|decrypt|addheader)\w*']
+    note: Two-pass AEAD built from CTR and OMAC; common on small devices because it needs only the encrypt direction of the cipher.
+  - key: siv
+    name: AES-SIV
+    primitive: ae
+    quantum: symmetric
+    patterns: ['wc_AesSiv\w*', 'aes_siv_(?:encrypt|decrypt)\b', 'EVP_CIPH_SIV_MODE\b']
+    note: Misuse-resistant deterministic AEAD (RFC 5297); also the key-wrap mode of Wi-Fi Easy Connect (DPP).
+  - key: gmac
+    name: GMAC
+    primitive: mac
+    quantum: symmetric
+    patterns: ['wc_Gmac\w*', 'bip_gmac_\w+']
+    note: GCM used only to authenticate (NIST SP 800-38D); 802.11 uses it for BIP-GMAC management frame protection.
+  - key: poly1305
+    name: Poly1305
+    primitive: mac
+    quantum: symmetric
+    patterns: ['crypto_onetimeauth\w*', 'crypto_poly1305\w*', 'Poly1305_(?:Init|Update|Final)\b', 'EVP_PKEY_POLY1305\b',
+               'br_poly1305_\w+', 'poly1305_(?:init|process|done|memory)\b']
+    note: One-time authenticator (RFC 8439). The ChaCha20-Poly1305 rule covers the AEAD; this one adds the standalone Poly1305 APIs, which are only safe with a fresh key per message.
+  - key: siphash
+    name: SipHash
+    primitive: mac
+    quantum: neutral
+    patterns: ['crypto_shorthash\w*', 'wc_(?:Init)?SipHash\w*', 'SipHash_(?:Init|Update|Final)\b', 'siphash_2_4\b',
+               'EVP_PKEY_SIPHASH\b']
+    note: Short-input keyed PRF meant for hash tables. It is not a general-purpose MAC, so do not count it towards message authentication.

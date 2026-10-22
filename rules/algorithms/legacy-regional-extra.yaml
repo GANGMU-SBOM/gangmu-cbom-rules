@@ -1,0 +1,59 @@
+# Legacy ciphers, regional standards and "no encryption" markers that the other files leave out.
+# Identifiers come from LibTomCrypt, OpenSSL 3.6, Mbed TLS 3.6, wolfSSL, BearSSL and the
+# gost-engine project; the GOST rules match gost-engine's own function names, not the OIDs that
+# every OpenSSL build carries.
+algorithms:
+  - key: twofish
+    name: Twofish
+    primitive: block-cipher
+    quantum: symmetric
+    patterns: ['twofish_(?:setup|ecb_encrypt|ecb_decrypt)\b', 'LTC_TWOFISH\b']
+    note: AES finalist (128-bit block); the AES key-size advice applies. Mostly seen in LibTomCrypt builds.
+  - key: rc5
+    name: RC5
+    primitive: block-cipher
+    quantum: broken
+    patterns: ['RC5_32_(?:set_key|encrypt|decrypt|\w*_encrypt)\b', 'EVP_rc5_\w+', 'rc5_(?:setup|ecb_encrypt|ecb_decrypt)\b']
+    note: The usual RC5-32 has a 64-bit block, so long sessions fall to birthday attacks (Sweet32). Avoid in new designs.
+  - key: xtea
+    name: XTEA
+    primitive: block-cipher
+    quantum: broken
+    patterns: ['xtea_(?:setup|ecb_encrypt|ecb_decrypt)\b', 'LTC_XTEA\b']
+    note: 64-bit block, 128-bit key, tiny code; the same birthday limit as Blowfish and 3DES.
+  - key: kasumi
+    name: KASUMI
+    primitive: block-cipher
+    quantum: broken
+    patterns: ['kasumi_(?:setup|ecb_encrypt|ecb_decrypt)\b', 'LTC_KASUMI\b']
+    note: 3G block cipher (64-bit block); a related-key attack on the full cipher is known. 4G and 5G moved to SNOW 3G, AES and ZUC.
+  - key: kuznyechik
+    name: Kuznyechik (Grasshopper)
+    primitive: block-cipher
+    quantum: symmetric
+    patterns: ['gost_grasshopper_\w+', 'kuznyechik_\w+']
+    note: Russian standard 128-bit block cipher (GOST R 34.12-2015); the same Grover guidance as AES applies.
+  - key: gost-magma
+    name: Magma / GOST 28147-89
+    primitive: block-cipher
+    quantum: broken
+    patterns: ['magma(?:crypt|decrypt)\b', 'magma_\w*cipher\b', 'Gost28147_89_\w+']
+    note: Russian 64-bit block cipher (GOST 28147-89, now GOST R 34.12-2015 Magma); the same birthday limit as 3DES and Blowfish.
+  - key: streebog
+    name: Streebog (GOST R 34.11-2012)
+    primitive: hash
+    quantum: symmetric
+    patterns: ['streebog(?:256|512)\b', 'init_gost2012_hash_ctx\b', 'gost2012_(?:hash_block|finish_hash)\b']
+    note: Russian hash with 256- or 512-bit output; not NIST-approved.
+  - key: gost3410
+    name: GOST R 34.10 signature
+    primitive: signature
+    quantum: vulnerable
+    patterns: ['gost_ec_(?:sign|verify)\w*']
+    note: Russian elliptic-curve signature (GOST R 34.10-2012), broken by Shor's algorithm like ECDSA.
+  - key: null-cipher
+    name: NULL cipher (no encryption)
+    primitive: other
+    quantum: broken
+    patterns: ['EVP_enc_null\b', 'MBEDTLS_CIPHER_(?:ID_)?NULL\w*', '(?:MBEDTLS_|BR_)?TLS_(?!NULL_WITH_NULL_NULL\b)[A-Z0-9_]*_WITH_NULL_[A-Z0-9_]+']
+    note: A TLS suite or cipher object that authenticates without encrypting (the TLS_NULL_WITH_NULL_NULL placeholder every stack defines for the state before the handshake is ignored). Fine for a test vector, a finding in a shipped build.

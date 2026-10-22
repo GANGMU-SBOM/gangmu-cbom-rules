@@ -12,6 +12,7 @@ algorithms:
   - pqcrystals_kyber\w*
   - crypto_kem_(?:keypair|enc|dec)\b
   - wc_MlKem\w*
+  - TPM2?_ALG_MLKEM\b
   note: NIST FIPS 203.
 - key: ml-dsa
   name: ML-DSA (Dilithium)
@@ -25,6 +26,7 @@ algorithms:
   - pqcrystals_dilithium\w*
   - wc_MlDsa\w*
   - wc_dilithium\w*
+  - TPM2?_ALG_MLDSA\b
   note: NIST FIPS 204.
 - key: slh-dsa
   name: SLH-DSA (SPHINCS+)

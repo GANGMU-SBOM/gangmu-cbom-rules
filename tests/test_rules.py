@@ -111,6 +111,17 @@ EXTRA_SAMPLES = [
     ("RC5_32_set_key(&k, 16, key, 12);", "rc5"),                         # OpenSSL
     ("xtea_setup(key, 16, 0, &skey);", "xtea"),                          # LibTomCrypt
     ("kasumi_setup(key, 16, 0, &skey);", "kasumi"),                      # LibTomCrypt
+    ("serpent_setkey(tfm, key, 32);", "serpent"),                        # Linux crypto/
+    ("__serpent_encrypt(ctx, dst, src);", "serpent"),
+    ("cast6_setkey(tfm, key, 32);", "cast6"),
+    ("tea_setkey(tfm, key, 16);", "tea"),
+    ("xeta_encrypt(tfm, dst, src);", "xtea"),
+    ("CRYP_AESGCM_Process(&hcryp, in, n, out, 1000);", "gcm"),           # STM32 HAL
+    ("atcab_aes_gcm_init(&ctx, 0, 0, iv, 12);", "gcm"),                  # cryptoauthlib
+    ('"aes256-gcm@openssh.com"', "gcm"),                                 # dropbear, libssh2
+    ("CRYP_AESCCM_Process(&hcryp, in, n, out, 1000);", "ccm"),
+    ("crypto_cipher_mode = CRYPTO_CIPHER_MODE_CCM;", "ccm"),             # Zephyr
+    ('"ssh-dss"', "dsa"),
     ("gost_grasshopper_cipher_init_ecb(ctx);", "kuznyechik"),            # gost-engine
     ("magmacrypt(ctx, in, out);", "gost-magma"),                         # gost-engine
     ("init_gost2012_hash_ctx(&ctx, 256);", "streebog"),                  # gost-engine
@@ -162,6 +173,10 @@ def test_every_added_rule_has_a_sample():
     (b"EVP_aes_128_gcm_x();", "gcm"),
     (b"crypto_aead_chacha20poly1305_ietf_encrypt(c);", "poly1305"),   # the AEAD has its own rule
     (b"int xts_len = 16;", "xts"),
+    (b"tea_setkeys(x);", "tea"),                        # a longer name
+    (b"steam_setkey(x);", "tea"),
+    (b"my_serpent_setkey(x);", "serpent"),
+    (b"CRYP_AESGCM_", "gcm"),
     (b"magma_table[4];", "gost-magma"),
     (b"streebog_note();", "streebog"),
     (b"sae_group = 19;", "sae"),

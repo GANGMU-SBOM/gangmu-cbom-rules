@@ -9,14 +9,16 @@ algorithms:
     primitive: ae
     quantum: symmetric
     patterns: ['mbedtls_gcm_\w+', 'MBEDTLS_GCM_C\b', 'PSA_ALG_GCM\b', 'wc_AesGcm\w*', 'CRYPTO_gcm128_\w+',
-               'EVP_aes_\d+_gcm\b', 'br_gcm_\w+', 'crypto_aead_aes256gcm\w*', 'gcmp_(?:256_)?(?:encrypt|decrypt)\b']
+               'EVP_aes_\d+_gcm\b', 'br_gcm_\w+', 'crypto_aead_aes256gcm\w*', 'gcmp_(?:256_)?(?:encrypt|decrypt)\b',
+               'CRYP_AESGCM_\w+', 'CRYPTO_CIPHER_MODE_GCM\b', 'atcab_aes_gcm_\w+', 'esp_aes_gcm_\w+', 'aes(?:128|256)-gcm@openssh\.com']
     note: Galois/Counter Mode (NIST SP 800-38D). The block cipher under it is usually AES, so the AES key-size advice applies; reusing a nonce under one key breaks it.
   - key: ccm
     name: CCM
     primitive: ae
     quantum: symmetric
     patterns: ['mbedtls_ccm_\w+', 'MBEDTLS_CCM_C\b', 'PSA_ALG_CCM\b', 'wc_AesCcm\w*', 'CRYPTO_ccm128_\w+',
-               'EVP_aes_\d+_ccm\b', 'br_ccm_\w+', 'tc_ccm_\w+', 'ccmp_(?:256_)?(?:encrypt|decrypt)\b']
+               'EVP_aes_\d+_ccm\b', 'br_ccm_\w+', 'tc_ccm_\w+', 'ccmp_(?:256_)?(?:encrypt|decrypt)\b',
+               'CRYP_AESCCM_\w+', 'CRYPTO_CIPHER_MODE_CCM\b']
     note: Counter with CBC-MAC (NIST SP 800-38C, RFC 3610). The AEAD of Bluetooth LE, Zigbee, Thread and WPA2 (CCMP); the AES key-size advice applies.
   - key: xts
     name: XTS

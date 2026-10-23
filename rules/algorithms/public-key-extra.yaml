@@ -18,7 +18,7 @@ algorithms:
     primitive: signature
     quantum: vulnerable
     patterns: ['DSA_(?:do_)?(?:sign|verify)\b', 'DSA_generate_(?:key|parameters\w*)\b', 'DSA_SIG_\w+',
-               'EVP_PKEY_DSA\b', 'wc_(?:Init|Make)?Dsa\w+']
+               'EVP_PKEY_DSA\b', 'wc_(?:Init|Make)?Dsa\w+', 'ssh-dss\b']
     note: Finite-field signature. FIPS 186-5 no longer approves DSA for generating signatures.
   - key: sm9
     name: SM9

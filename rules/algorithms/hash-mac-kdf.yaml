@@ -9,6 +9,7 @@ algorithms:
   - SM3_(?:Init|Update|Final)\w*
   - mbedtls_sm3_\w+
   - EVP_sm3\b
+  - TPM2?_ALG_SM3_256\b
   note: Chinese national hash (256-bit output).
 - key: md5
   name: MD5
@@ -46,6 +47,8 @@ algorithms:
   - sha1_(?:init|process|done)\b
   - SHA1(?:Init|Update|Final|Transform)\b
   - EVP_sha1\b
+  - TPM2?_ALG_SHA1\b
+  - sha1_(?:update|final)\b
   note: Collisions are practical; avoid in signatures.
 - key: sha-256
   name: SHA-256
@@ -67,6 +70,11 @@ algorithms:
   - crypto_hash_sha256\w*
   - sha256_(?:init|process|done)\b
   - EVP_sha(?:224|256)\b
+  - atcab_sha\w*
+  - CRYPTO_HASH_ALGO_SHA(?:224|256)\b
+  - esp_sha256_\w+
+  - TPM2?_ALG_SHA256\b
+  - sha256_(?:update|final)\b
   note: Fine today; 128-bit collision strength is the figure to weigh long-lived signatures against.
 - key: sha-512
   name: SHA-384/SHA-512
@@ -86,6 +94,10 @@ algorithms:
   - br_sha(?:384|512)_\w+
   - sha(?:384|512)_(?:init|process|done)\b
   - EVP_sha(?:384|512)\b
+  - CRYPTO_HASH_ALGO_SHA(?:384|512)\b
+  - esp_sha512_\w+
+  - TPM2?_ALG_SHA(?:384|512)\b
+  - sha512_(?:update|final)\b
   note: SHA-384 and up are the sizes the post-quantum guidance names.
 - key: sha-3
   name: SHA-3
@@ -98,6 +110,8 @@ algorithms:
   - MBEDTLS_SHA3_C\b
   - keccak_\w+
   - PSA_ALG_SHA3_\w+
+  - CRYPTO_HASH_ALGO_SHA3_\w+
+  - TPM2?_ALG_SHA3_\w+
   note: ''
 - key: hmac
   name: HMAC
@@ -114,6 +128,14 @@ algorithms:
   - br_hmac_(?:init|update|out|key_init)\w*
   - crypto_auth_hmacsha\w*
   - hmac_(?:init|process|done|memory)\b
+  - HAL_HMAC(?:Ex)?_\w+
+  - atcab_hmac\w*
+  - optiga_crypt_hmac\w*
+  - esp_hmac_\w+
+  - hmac_(?:sha1|sha256|sha384|sha512|md5)_(?:key|ctx|usingrawkey)\b
+  - hmac-(?:sha1|md5)(?:-96)?\b
+  - hmac-sha2-(?:256|512)\b
+  - TPM2?_ALG_HMAC\b
   note: ''
 - key: kdf
   name: HKDF/PBKDF2
@@ -131,6 +153,8 @@ algorithms:
   - MBEDTLS_HKDF_C\b
   - MBEDTLS_PKCS5_C\b
   - crypto_kdf_hkdf_\w+
+  - optiga_crypt_hkdf\w*
+  - atcab_kdf\b
   note: ''
 - key: drbg
   name: CTR_DRBG/HMAC_DRBG

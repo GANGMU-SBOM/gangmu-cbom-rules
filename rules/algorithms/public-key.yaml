@@ -11,6 +11,7 @@ algorithms:
   - ossl_sm2_\w+
   - MBEDTLS_ECP_DP_SM2\w*
   - \bsm2p256v1\b
+  - TPM2?_ALG_SM2\b
   note: 'Elliptic-curve scheme: a quantum computer breaks it like ECDSA.'
 - key: rsa
   name: RSA
@@ -30,6 +31,11 @@ algorithms:
   - rsa_(?:make_key|sign_hash|verify_hash|encrypt_key|decrypt_key)(?:_ex)?\b
   - (?:MBEDTLS_|BR_)?TLS_(?:RSA|(?:ECDHE|DHE)_RSA)_WITH_\w+
   - (?:ECDHE|DHE)-RSA-[A-Z0-9-]+
+  - optiga_crypt_rsa_\w+
+  - TPM2?_ALG_(?:RSA|RSASSA|RSAPSS|RSAES)\b
+  - esp_ds_\w+
+  - ssh-rsa\b
+  - rsa-sha2-(?:256|512)\b
   note: Broken by Shor's algorithm at every key size.
 - key: ecdsa
   name: ECDSA
@@ -49,6 +55,11 @@ algorithms:
   - ecc_(?:sign|verify)_hash\b
   - (?:MBEDTLS_|BR_)?TLS_ECDHE_ECDSA_WITH_\w+
   - ECDHE-ECDSA-[A-Z0-9-]+
+  - atcab_(?:sign|verify)(?:_[a-z0-9_]+)?\b
+  - optiga_crypt_ecdsa_\w+
+  - esp_ecdsa_\w+
+  - TPM2?_ALG_ECDSA\b
+  - ecdsa-sha2-nistp(?:256|384|521)\b
   note: Broken by Shor's algorithm at every curve.
 - key: ecdh
   name: ECDH
@@ -65,6 +76,10 @@ algorithms:
   - ecc_shared_secret\b
   - (?:MBEDTLS_|BR_)?TLS_ECDHE?_(?:RSA|ECDSA|PSK)_WITH_\w+
   - ECDHE-[A-Z]+-[A-Z0-9-]+
+  - atcab_ecdh\w*
+  - optiga_crypt_ecdh\b
+  - TPM2?_ALG_ECDH\b
+  - ecdh-sha2-nistp(?:256|384|521)\b
   note: Broken by Shor's algorithm at every curve.
 - key: ed25519
   name: Ed25519
@@ -76,6 +91,7 @@ algorithms:
   - crypto_sign_ed25519\w*
   - \bEd25519\b
   - crypto_ed25519_\w+
+  - ssh-ed25519\b
   note: 'Elliptic-curve scheme: broken by Shor''s algorithm.'
 - key: x25519
   name: X25519
@@ -89,6 +105,7 @@ algorithms:
   - MBEDTLS_ECP_DP_CURVE25519\w*
   - X25519\b
   - crypto_x25519\w*
+  - curve25519-sha256\b
   note: 'Elliptic-curve key agreement: broken by Shor''s algorithm.'
 - key: dh
   name: Diffie-Hellman
@@ -102,4 +119,5 @@ algorithms:
   - dh_(?:make_key|shared_secret|set_pg)\w*
   - (?:MBEDTLS_|BR_)?TLS_DHE_(?:RSA|DSS|PSK)_WITH_\w+
   - DHE-[A-Z]+-[A-Z0-9-]+
+  - diffie-hellman-group[0-9a-z-]*
   note: 'Finite-field key agreement: broken by Shor''s algorithm.'

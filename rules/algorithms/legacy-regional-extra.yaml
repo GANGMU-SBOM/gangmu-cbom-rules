@@ -19,8 +19,26 @@ algorithms:
     name: XTEA
     primitive: block-cipher
     quantum: broken
-    patterns: ['xtea_(?:setup|ecb_encrypt|ecb_decrypt)\b', 'LTC_XTEA\b']
+    patterns: ['xtea_(?:setup|ecb_encrypt|ecb_decrypt|setkey|encrypt|decrypt)\b', 'xeta_(?:encrypt|decrypt)\b', 'LTC_XTEA\b']
     note: 64-bit block, 128-bit key, tiny code; the same birthday limit as Blowfish and 3DES.
+  - key: tea
+    name: TEA
+    primitive: block-cipher
+    quantum: broken
+    patterns: ['tea_(?:setkey|encrypt|decrypt)\b']
+    note: Tiny Encryption Algorithm (64-bit block, 128-bit key) with equivalent keys and related-key weaknesses; superseded by XTEA. Present in the Linux kernel crypto API.
+  - key: serpent
+    name: Serpent
+    primitive: block-cipher
+    quantum: symmetric
+    patterns: ['(?:__)?serpent_(?:setkey|encrypt|decrypt)\b']
+    note: AES finalist (128-bit block); the AES key-size advice applies. Still built into the Linux kernel crypto API.
+  - key: cast6
+    name: CAST-256 (CAST6)
+    primitive: block-cipher
+    quantum: symmetric
+    patterns: ['(?:__)?cast6_(?:setkey|encrypt|decrypt)\b']
+    note: AES candidate with a 128-bit block (RFC 2612); the AES key-size advice applies. Still built into the Linux kernel crypto API.
   - key: kasumi
     name: KASUMI
     primitive: block-cipher

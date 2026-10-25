@@ -20,6 +20,12 @@ algorithms:
   - tc_aes\d+_\w+
   - rijndael_(?:setup|ecb_encrypt|ecb_decrypt)\b
   - EVP_aes_\d+_(?:cbc|ecb|ctr|cfb\w*|ofb)\b
+  - atcab_aes_(?:cbc|ctr|encrypt|decrypt)\w*
+  - CRYPTO_CIPHER_ALGO_AES\b
+  - aes_expandkey\b
+  - crypto_aes_set_key\b
+  - aes(?:128|192|256)-(?:ctr|cbc)\b
+  - TPM2?_ALG_AES\b
   note: A 128-bit key leaves about 64 bits of quantum security; 256-bit keys are the usual advice.
 - key: des
   name: DES/3DES
@@ -35,6 +41,8 @@ algorithms:
   - des3?_(?:setup|ecb_encrypt|ecb_decrypt)\b
   - EVP_des_\w+
   - (?:MBEDTLS_|BR_)?TLS_\w+_WITH_3DES_EDE_CBC_\w+
+  - CRYP_T?DES_\w+
+  - 3des-cbc\b
   note: DES and 3DES are legacy; avoid them in new designs.
 - key: rc4
   name: RC4
@@ -47,6 +55,7 @@ algorithms:
   - wc_Arc4\w*
   - MBEDTLS_ARC4_C\b
   - (?:MBEDTLS_|BR_)?TLS_\w+_WITH_RC4_\w+
+  - arc4_(?:setkey|crypt)\b
   note: RC4 has practical attacks; remove it.
 - key: chacha20-poly1305
   name: ChaCha20-Poly1305
@@ -66,6 +75,7 @@ algorithms:
   - br_chacha20_\w+
   - chacha20poly1305_\w+
   - chacha_(?:setup|crypt)\b
+  - chacha20-poly1305@openssh\.com
   note: A 256-bit key.
 - key: sm4
   name: SM4
@@ -76,4 +86,5 @@ algorithms:
   - SM4_(?:set_key|encrypt|decrypt|CTX)\w*
   - mbedtls_sm4_\w+
   - EVP_sm4_\w+
+  - TPM2?_ALG_SM4\b
   note: Chinese national block cipher (128-bit key).
